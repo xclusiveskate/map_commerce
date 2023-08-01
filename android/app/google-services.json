@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "452089550029",
+    "project_id": "map-commerce-edc3b",
+    "storage_bucket": "map-commerce-edc3b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:452089550029:android:9846acb0d336d9e0944584",
+        "android_client_info": {
+          "package_name": "com.example.map_commerce"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9dVpnThyy4yLbq5nG8ODA9HK4pr2XrMk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
