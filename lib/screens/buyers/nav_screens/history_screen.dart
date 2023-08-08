@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'package:map_commerce/screens/sellers/nav_pages/oder_history.dart';
+import 'package:map_commerce/widgets/history.dart';
 
 class BuyerTransactionHistoryScreen extends StatefulWidget {
   const BuyerTransactionHistoryScreen({super.key});

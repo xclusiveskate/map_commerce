@@ -1,142 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:map_commerce/models/order.dart';
-import 'package:map_commerce/screens/buyers/other_pages/history.dart';
-import 'package:map_commerce/screens/sellers/other_pages/view_order_history.dart';
-import '../../../constants/constants.dart';
-import '../../../local_storage/check_admin.dart';
+import 'package:map_commerce/widgets/history.dart';
 
-class OrdersScreen extends StatefulWidget {
-  const OrdersScreen({super.key});
+class SellerTransactionHistoryScreen extends StatefulWidget {
+  const SellerTransactionHistoryScreen({super.key});
 
   @override
-  State<OrdersScreen> createState() => _OrdersScreenState();
+  State<SellerTransactionHistoryScreen> createState() =>
+      _SellerTransactionHistoryScreenState();
 }
 
-class _OrdersScreenState extends State<OrdersScreen> {
-  final orderStream =
-      FirebaseFirestore.instance.collection('orders').snapshots();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class _SellerTransactionHistoryScreenState
+    extends State<SellerTransactionHistoryScreen> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 0),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const Align(
-              alignment: Alignment.center,
-              child: Text(
-                // textAlign: TextAlign.center,
-                "Transaction Histories",
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            StreamBuilder(
-                stream: orderStream,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasError) {
-                    return const Text("Error occurred while fetching data");
-                  } else if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else {
-                    final List<QueryDocumentSnapshot> gottenOrders =
-                        snapshot.data!.docs;
-
-                    List<OrderModel> allOrders = gottenOrders
-                        .map((doc) => OrderModel.fromFirestore(doc))
-                        .toList();
-
-                    var currentUserId = FirebaseAuth.instance.currentUser!.uid;
-
-                    final orderForCurrentUser = allOrders
-                        .where((element) => element.userId == currentUserId);
-
-                    return allOrders.isEmpty
-                        ? const Center(child: Text("No active order "))
-                        : ListView.builder(
-                            shrinkWrap: true,
-                            primary: false,
-                            itemCount: isAdmin!
-                                ? allOrders.length
-                                : orderForCurrentUser.length,
-                            itemBuilder: (context, index) {
-                              final order = allOrders[index];
-
-                              final productOrdered = theProducts.firstWhere(
-                                  (element) => element.id == order.productId);
-                              final personThatOrdered = theUsers.where(
-                                  (element) => element.userId == order.userId);
-                              // final theDate = order.dateOfOrder;
-                              // final date = DateFormat.yMMMMd().format(theDate);
-                              return ListTile(
-                                onTap: () {
-                                  isAdmin!
-                                      ? Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  SellerViewOrderDetails(
-                                                      order: order,
-                                                      product: productOrdered,
-                                                      user: personThatOrdered
-                                                          .first)))
-                                      : Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  BuyerOrderDetails(
-                                                      product: productOrdered,
-                                                      order: order)));
-                                },
-                                leading: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    const Text("Quantity"),
-                                    Text(order.quantity.toString())
-                                  ],
-                                ),
-                                title: Text(productOrdered.name),
-                                subtitle: Text(
-                                    "Total Amount : \$${order.totalAmount.toString()}"),
-                                trailing: order.isDelivered == true
-                                    ? Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          const Text("status"),
-                                          OutlinedButton(
-                                              onPressed: () {},
-                                              child: const Text("Delivered"))
-                                        ],
-                                      )
-                                    : const Column(
-                                        children: [
-                                          Text("status"),
-                                          Text("pending")
-                                        ],
-                                      ),
-                              );
-                            });
-                  }
-                })
-          ],
-        ),
-      ),
-    );
+    return const OrdersScreen();
   }
 }

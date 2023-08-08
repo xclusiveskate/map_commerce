@@ -77,6 +77,7 @@ class _SellerHomeScreenState extends State<SellerHomeScreen>
                   suffixIcon: const Icon(Icons.filter),
                   hintText: "Search Category"),
             ),
+            // ignore: avoid_unnecessary_containers
             Container(
               child: TabBar(
                   indicatorColor: Colors.amber,

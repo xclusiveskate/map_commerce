@@ -106,11 +106,9 @@ class Authentication {
           message = "invalid email";
           break;
         case 'user-disabled':
-          message = "Your accounnt has been disabled, contact customer service";
+          message = "Your account has been disabled, contact customer service";
           break;
-        case 'user-disabled':
-          message = "Your accounnt has been disabled, contact customer service";
-          break;
+
         case 'user-not-found':
           message = "user does not exist";
           break;

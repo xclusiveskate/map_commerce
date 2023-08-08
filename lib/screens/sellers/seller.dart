@@ -16,7 +16,7 @@ class _SellerMainScreenState extends State<SellerMainScreen> {
   List pagess = [
     const SellerHomeScreen(),
     const SellerUsersScreen(),
-    const OrdersScreen(),
+    const SellerTransactionHistoryScreen(),
     const ShopProfilePage()
   ];
   @override
