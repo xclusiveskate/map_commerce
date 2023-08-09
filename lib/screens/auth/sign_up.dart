@@ -30,16 +30,17 @@ class _SignUpState extends State<SignUp> {
     }
   }
 
-  signUp() async {
+  signUp({required BuildContext theContext}) async {
     String photoUrl = await CloudMethod().saveImageToCloudinary(img: image);
     final res = await Authentication.signAdminUpWithEmailAndPassword(
-        context: context,
+        context: theContext,
         displayName: nameController.text,
         storeName: storeController.text,
         email: emailController.text,
         password: passController.text,
         storeDescription: descriptionController.text,
         photoUrl: photoUrl);
+    Navigator.pop(context);
     print(res);
   }
 
@@ -142,9 +143,7 @@ class _SignUpState extends State<SignUp> {
                 ),
                 OutlinedButton(
                     onPressed: () {
-                      signUp();
-
-                      Navigator.pop(context);
+                      signUp(theContext: context);
                     },
                     child: const Text("Sign up"))
               ],

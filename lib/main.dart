@@ -2,14 +2,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:map_commerce/firebase_options.dart';
+import 'package:map_commerce/provider/admin.change.dart';
 import 'package:map_commerce/screens/auth/check_user.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) => AdminChanger(), child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

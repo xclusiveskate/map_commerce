@@ -2,10 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:map_commerce/models/order.dart';
+import 'package:map_commerce/provider/admin.change.dart';
 import 'package:map_commerce/screens/buyers/other_pages/view_history.dart.dart';
 import 'package:map_commerce/screens/sellers/other_pages/view_order_history.dart';
+import 'package:provider/provider.dart';
 import '../../../constants/constants.dart';
-import '../../../local_storage/check_admin.dart';
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
@@ -27,6 +28,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final status = context.watch<AdminChanger>();
     return Padding(
       padding:
           EdgeInsets.symmetric(vertical: height / 30, horizontal: width / 40),
@@ -72,7 +74,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                         : ListView.builder(
                             shrinkWrap: true,
                             primary: false,
-                            itemCount: isAdmin!
+                            itemCount: status.isAdmin
                                 ? allOrders.length
                                 : orderForCurrentUser.length,
                             itemBuilder: (context, index) {
@@ -103,7 +105,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   strokeAlign: 0.5,
                                 )),
                                 onTap: () {
-                                  isAdmin!
+                                  status.isAdmin
                                       ? Navigator.push(
                                           context,
                                           MaterialPageRoute(

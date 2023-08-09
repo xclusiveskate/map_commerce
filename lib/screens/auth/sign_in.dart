@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:map_commerce/controllers/auth.dart';
+import 'package:map_commerce/provider/admin.change.dart';
 import 'package:map_commerce/screens/auth/sign_up.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../local_storage/check_admin.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -28,6 +29,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isAdmin = context.watch<AdminChanger>();
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -41,7 +43,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     "Welcome!! ",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  isAdmin!
+                  isAdmin.isAdmin
                       ? TextButton(
                           onPressed: () {
                             Navigator.push(
@@ -63,7 +65,7 @@ class _AuthScreenState extends State<AuthScreen> {
               const SizedBox(
                 height: 50,
               ),
-              isAdmin!
+              isAdmin.isAdmin
                   ? SizedBox(
                       child: Column(
                         children: [
@@ -120,15 +122,16 @@ class _AuthScreenState extends State<AuthScreen> {
                   const Text("Log in as"),
                   TextButton(
                       onPressed: () async {
+                        isAdmin.updateAdminStatus(!isAdmin.isAdmin);
                         setState(() {
-                          isAdmin = !isAdmin!;
+                          // isAdmin = !isAdmin;
                         });
-
                         final pref = await SharedPreferences.getInstance();
-                        await pref.setBool('isAdmin', isAdmin!);
+                        await pref.setBool('isAdmin', isAdmin.isAdmin);
                       },
-                      child:
-                          isAdmin! ? const Text("user") : const Text("admin"))
+                      child: isAdmin.isAdmin
+                          ? const Text("user")
+                          : const Text("admin"))
                 ],
               )
             ],

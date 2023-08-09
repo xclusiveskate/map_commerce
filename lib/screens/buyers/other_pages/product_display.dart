@@ -197,20 +197,20 @@ class _ProductDisplayState extends State<ProductDisplay> {
             padding: const EdgeInsets.all(12.0),
             child: Container(
               alignment: Alignment.centerLeft,
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     textAlign: TextAlign.start,
                     "Description",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(
-                    "The Lemon fruit is the fruit of various citrus species in the family Rosaceae. it is primarily refers to Citrus x selenosis. Which is also called sweet orange..... Read more",
-                    style: TextStyle(
+                    widget.product.description,
+                    style: const TextStyle(
                       fontSize: 18,
                     ),
                   )

@@ -16,6 +16,7 @@ class AddProduct extends StatefulWidget {
 
 class _AddProductState extends State<AddProduct> {
   TextEditingController nameControl = TextEditingController();
+  TextEditingController descriptionControl = TextEditingController();
   TextEditingController amountControl = TextEditingController();
   TextEditingController availableControl = TextEditingController();
   TextEditingController categoryControl = TextEditingController();
@@ -36,6 +37,7 @@ class _AddProductState extends State<AddProduct> {
 
     final product = await Database.uploadProduct(
         name: nameControl.text,
+        descripiton: descriptionControl.text,
         amount: int.parse(amountControl.text),
         availableQuantity: int.parse(availableControl.text),
         category: categoryControl.text,
@@ -60,6 +62,16 @@ class _AddProductState extends State<AddProduct> {
                     contentPadding: EdgeInsets.all(6),
                     border: OutlineInputBorder(),
                     labelText: "name of product"),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextField(
+                controller: descriptionControl,
+                decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(6),
+                    border: OutlineInputBorder(),
+                    labelText: "product description"),
               ),
               const SizedBox(
                 height: 10,

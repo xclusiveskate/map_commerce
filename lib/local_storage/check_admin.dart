@@ -1,7 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-bool? isAdmin = false;
-
 class SaveToLocal {
   static Future<void> setBool() async {
     final pref = await SharedPreferences.getInstance();
@@ -10,7 +8,7 @@ class SaveToLocal {
 
   static getBool() async {
     final pref = await SharedPreferences.getInstance();
-    isAdmin = pref.getBool('isAdmin') ?? false;
-    return isAdmin;
+    final theStatus = pref.getBool('isAdmin') ?? false;
+    return theStatus;
   }
 }

@@ -13,6 +13,7 @@ class Database {
   static final user = FirebaseAuth.instance.currentUser!.uid;
   static uploadProduct(
       {required String name,
+      required String descripiton,
       required int amount,
       required int availableQuantity,
       required String category,
@@ -22,6 +23,7 @@ class Database {
       Product product = Product(
           id: uid,
           name: name,
+          description: descripiton,
           amount: amount,
           availableQuantity: availableQuantity,
           imageUrl: productImageUrl,

@@ -2,8 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:map_commerce/constants/constants.dart';
 import 'package:map_commerce/models/product.dart';
+import 'package:map_commerce/provider/admin.change.dart';
 import 'package:map_commerce/screens/buyers/other_pages/product_display.dart';
-import '../../../local_storage/check_admin.dart';
+import 'package:provider/provider.dart';
 
 class All extends StatefulWidget {
   const All({super.key});
@@ -14,27 +15,18 @@ class All extends StatefulWidget {
 
 class _AllState extends State<All> {
   ScrollController scroll = ScrollController();
-  // List<Product> products = [];
+
   Stream<QuerySnapshot<Object?>> productStream =
       FirebaseFirestore.instance.collection('products').snapshots();
-  // late bool isAdmin;
-  // getStatus() async {
-  //   final status = await SaveToLocal.getBool();
-  //   setState(() {
-  //     isAdmin = status;
-  //   });
-  //   print(status);
-  // }
 
   @override
   void initState() {
     super.initState();
-    // getStatus();
   }
 
   @override
   Widget build(BuildContext context) {
-    // final check = context.watch<Admin>();
+    final status = context.watch<AdminChanger>();
     return StreamBuilder<QuerySnapshot<Object?>>(
         stream: productStream,
         builder: (BuildContext context,
@@ -68,7 +60,7 @@ class _AllState extends State<All> {
                   return Container(
                     child: InkWell(
                       onTap: () {
-                        isAdmin!
+                        status.isAdmin!
                             ? null
                             : Navigator.push(
                                 context,
