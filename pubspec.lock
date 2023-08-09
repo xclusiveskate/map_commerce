@@ -336,6 +336,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.1"
+  google_map_place_picker:
+    dependency: "direct main"
+    description:
+      name: google_map_place_picker
+      sha256: d5950b536b4281e0a677fcd81ff31c1bce1b482f588bbc10901f8925138258cc
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   google_maps:
     dependency: transitive
     description:
