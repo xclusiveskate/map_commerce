@@ -8,3 +8,4 @@ import '../models/user.dart';
 List<UserModel> theUsers = [];
 List<Product> theProducts = [];
 List<Order> theOrders = [];
+String googleApiKey = 'AIzaSyDu7e7IDZpF6HU63Sd4VLzjz3CSoL08AKE';

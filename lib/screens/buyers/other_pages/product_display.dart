@@ -111,6 +111,11 @@ class _ProductDisplayState extends State<ProductDisplay> {
               )
             ],
           ),
+          SizedBox(
+            height: 200,
+            width: MediaQuery.of(context).size.width / 2,
+            child: Image.network(widget.product.imageUrl),
+          ),
           // CarouselSlider.builder(
           //   carouselController: controller,
           //   itemCount: widget.theProduct.image.length,
