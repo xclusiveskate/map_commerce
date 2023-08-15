@@ -6,6 +6,7 @@ class OrderModel {
   final String userId;
   final DateTime dateOfOrder;
   final String deliveryAddress;
+  final String nearbyDeliveryAddress;
   final int contactInfo;
   final int quantity;
   final int totalAmount;
@@ -17,6 +18,7 @@ class OrderModel {
     required this.userId,
     required this.dateOfOrder,
     required this.deliveryAddress,
+    required this.nearbyDeliveryAddress,
     required this.contactInfo,
     required this.quantity,
     required this.totalAmount,
@@ -31,6 +33,7 @@ class OrderModel {
       'userId': userId,
       'dateOfOrder': dateOfOrder.toIso8601String(),
       'deliveryAddress': deliveryAddress,
+      'nearbyDeliveryAddress': nearbyDeliveryAddress,
       'contactInfo': contactInfo,
       'quantity': quantity,
       'totalAmount': totalAmount,
@@ -47,6 +50,7 @@ class OrderModel {
         userId: data['userId'] as String,
         dateOfOrder: DateTime.parse(data['dateOfOrder']),
         deliveryAddress: data['deliveryAddress'] as String,
+        nearbyDeliveryAddress: data['nearbyDeliveryAddress'] as String,
         contactInfo: data['contactInfo'] as int,
         quantity: data['quantity'],
         totalAmount: data['totalAmount'] as int,
@@ -61,6 +65,7 @@ class OrderModel {
     String? productId,
     String? userId,
     String? deliveryAddress,
+    String? nearbyDeliveryAddress,
     DateTime? dateOfOrder,
     DateTime? dateDelivered,
   }) {
@@ -70,6 +75,8 @@ class OrderModel {
         userId: userId ?? this.userId,
         dateOfOrder: dateOfOrder ?? this.dateOfOrder,
         deliveryAddress: deliveryAddress ?? this.deliveryAddress,
+        nearbyDeliveryAddress:
+            nearbyDeliveryAddress ?? this.nearbyDeliveryAddress,
         contactInfo: contactInfo,
         quantity: quantity,
         totalAmount: totalAmount,

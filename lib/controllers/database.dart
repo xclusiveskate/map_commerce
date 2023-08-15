@@ -54,6 +54,7 @@ class Database {
       {required String productId,
       required int phoneNumber,
       required String address,
+      required String nearbyAddress,
       required int quantity,
       required int total}) async {
     try {
@@ -65,6 +66,7 @@ class Database {
           userId: user,
           dateOfOrder: DateTime.now(),
           deliveryAddress: address,
+          nearbyDeliveryAddress: nearbyAddress,
           contactInfo: phoneNumber,
           quantity: quantity,
           totalAmount: total,

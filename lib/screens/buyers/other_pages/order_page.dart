@@ -23,6 +23,7 @@ class OrderPage extends StatefulWidget {
 
 class _OrderPageState extends State<OrderPage> {
   TextEditingController addressController = TextEditingController();
+  TextEditingController googleAddressController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
   createOrder() async {
@@ -31,6 +32,7 @@ class _OrderPageState extends State<OrderPage> {
           productId: widget.product.id!,
           phoneNumber: int.parse(phoneController.text),
           address: addressController.text,
+          nearbyAddress: googleAddressController.text,
           quantity: widget.quantity,
           total: widget.total);
 
@@ -61,7 +63,15 @@ class _OrderPageState extends State<OrderPage> {
               child: TextField(
                 controller: addressController,
                 decoration: const InputDecoration(
-                    labelText: "input your delivery address"),
+                    labelText: "input your current/delivery address"),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: googleAddressController,
+                decoration:
+                    const InputDecoration(labelText: "pick a nearby location"),
               ),
             ),
             Padding(
