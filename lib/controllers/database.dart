@@ -47,6 +47,7 @@ class Database {
           imageUrl: res.user!.photoURL);
 
       await _db.collection('users').doc(id).set(user.toJson());
+      return id;
     }
   }
 

@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:map_commerce/controllers/auth.dart';
 import 'package:map_commerce/models/user.dart';
@@ -12,6 +15,7 @@ class BuyerProfileScreen extends StatefulWidget {
 
 class _BuyerProfileScreenState extends State<BuyerProfileScreen> {
   UserModel? user;
+  String userId = "";
   List tiles = [
     {"icon": Icons.person, "name": "My Account"},
     {"icon": Icons.notifications, "name": "Notifications"},
@@ -19,6 +23,25 @@ class _BuyerProfileScreenState extends State<BuyerProfileScreen> {
     {"icon": Icons.help_outline, "name": "Help Center"},
     {"icon": Icons.logout_rounded, "name": "Log Out"},
   ];
+  @override
+  void initState() {
+    super.initState();
+    userId = theId;
+    getUser();
+  }
+
+  final theId = FirebaseAuth.instance.currentUser!.uid;
+  getUser() async {
+    final theUser = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .get()
+        .then((value) => UserModel.fromFirestore(value));
+    setState(() {
+      user = theUser;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -44,6 +67,7 @@ class _BuyerProfileScreenState extends State<BuyerProfileScreen> {
                   const CircleAvatar(
                     radius: 60,
                     backgroundColor: Colors.amberAccent,
+                    backgroundImage: NetworkImage(user.imageUrl!),
                   ),
                   Positioned(
                       left: MediaQuery.of(context).size.width / 6,
@@ -58,37 +82,39 @@ class _BuyerProfileScreenState extends State<BuyerProfileScreen> {
               const SizedBox(
                 height: 30,
               ),
-              ...tiles
-                  .map((e) => Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: ListTile(
-                          tileColor: Colors.amber.withOpacity(0.3),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0)),
-                          contentPadding: const EdgeInsets.all(6.0),
-                          onTap: () => switch (e['name']) {
-                            "My Account" => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        MyAccountPage(userId: user?.userId))),
-                            "Log Out" => Authentication.signOut(),
-                            _ => ""
-                          },
-                          leading: Icon(
-                            e['icon'],
-                            size: 30,
+              Column(
+                children: tiles
+                    .map((e) => Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: ListTile(
+                            tileColor: Colors.amber.withOpacity(0.3),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0)),
+                            contentPadding: const EdgeInsets.all(6.0),
+                            onTap: () => switch (e['name']) {
+                              "My Account" => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          MyAccountPage(userId: user?.userId))),
+                              "Log Out" => Authentication.signOut(),
+                              _ => ""
+                            },
+                            leading: Icon(
+                              e['icon'],
+                              size: 30,
+                            ),
+                            title: Text(
+                              e['name'],
+                              style: const TextStyle(fontSize: 20),
+                            ),
+                            trailing: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.arrow_forward_outlined)),
                           ),
-                          title: Text(
-                            e['name'],
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                          trailing: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.arrow_forward_outlined)),
-                        ),
-                      ))
-                  .toList()
+                        ))
+                    .toList(),
+              )
             ],
           ),
         ),
