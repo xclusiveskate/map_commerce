@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:map_commerce/screens/buyers/nav_screens/history_screen.dart';
 import 'package:map_commerce/screens/buyers/nav_screens/home_screen.dart';
-import 'package:map_commerce/screens/buyers/nav_screens/profile_screen.dart';
+import 'package:map_commerce/screens/buyers/nav_screens/account_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -14,7 +14,7 @@ class _MainScreenState extends State<MainScreen> {
   List pages = [
     const BuyerHomeScreen(),
     const BuyerTransactionHistoryScreen(),
-    const BuyerProfileScreen()
+    const AccountScreen()
   ];
   int _currentIndex = 0;
   @override

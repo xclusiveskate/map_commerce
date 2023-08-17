@@ -1,21 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:map_commerce/controllers/auth.dart';
 import 'package:map_commerce/models/user.dart';
-import 'package:map_commerce/screens/buyers/other_pages/account.dart';
+import 'package:map_commerce/screens/buyers/other_pages/profile.dart';
 
-class BuyerProfileScreen extends StatefulWidget {
-  const BuyerProfileScreen({super.key});
+class AccountScreen extends StatefulWidget {
+  const AccountScreen({super.key});
 
   @override
-  State<BuyerProfileScreen> createState() => _BuyerProfileScreenState();
+  State<AccountScreen> createState() => _AccountScreenState();
 }
 
-class _BuyerProfileScreenState extends State<BuyerProfileScreen> {
+class _AccountScreenState extends State<AccountScreen> {
   UserModel? user;
   String userId = "";
+  String image = "";
   List tiles = [
     {"icon": Icons.person, "name": "My Account"},
     {"icon": Icons.notifications, "name": "Notifications"},
@@ -54,7 +54,7 @@ class _BuyerProfileScreenState extends State<BuyerProfileScreen> {
               const Align(
                 alignment: Alignment.center,
                 child: Text(
-                  "Profile",
+                  "Account",
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -64,11 +64,11 @@ class _BuyerProfileScreenState extends State<BuyerProfileScreen> {
               Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  const CircleAvatar(
-                    radius: 60,
-                    backgroundColor: Colors.amberAccent,
-                    backgroundImage: NetworkImage(user.imageUrl!),
-                  ),
+                  CircleAvatar(
+                      radius: 60,
+                      backgroundColor: Colors.amberAccent,
+                      backgroundImage:
+                          NetworkImage(user?.imageUrl ?? "loading")),
                   Positioned(
                       left: MediaQuery.of(context).size.width / 6,
                       top: 78,
@@ -96,7 +96,7 @@ class _BuyerProfileScreenState extends State<BuyerProfileScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          MyAccountPage(userId: user?.userId))),
+                                          MyProfile(user: user!))),
                               "Log Out" => Authentication.signOut(),
                               _ => ""
                             },
@@ -122,9 +122,3 @@ class _BuyerProfileScreenState extends State<BuyerProfileScreen> {
     );
   }
 }
-
-//  child: OutlinedButton(
-//                       onPressed: () {
-//                         Authentication.signOut();
-//                       },
-//                       child: const Text("Sign Out"))

@@ -2,9 +2,10 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:map_commerce/constants/constants.dart';
 import 'package:map_commerce/controllers/auth.dart';
 import 'package:map_commerce/controllers/cloudinary.dart';
+import 'package:map_commerce/utils/image_picker.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -14,21 +15,12 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  String image = "";
   TextEditingController nameController = TextEditingController();
   TextEditingController storeController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  String image = "";
-
-  pickImage() async {
-    ImagePicker pick = ImagePicker();
-    XFile? file = await pick.pickImage(source: ImageSource.gallery);
-    if (file != null) {
-      image = file.path;
-      setState(() {});
-    }
-  }
 
   signUp({required BuildContext theContext}) async {
     String photoUrl = await CloudMethod().saveImageToCloudinary(img: image);
@@ -79,7 +71,7 @@ class _SignUpState extends State<SignUp> {
                             ),
                       TextButton(
                           onPressed: () {
-                            pickImage();
+                            pickImage(image: image);
                           },
                           child: const Text("Pick image"))
                     ],
