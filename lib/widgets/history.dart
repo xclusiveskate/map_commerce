@@ -111,7 +111,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   SellerViewOrderDetails(
-                                                      order: order,
+                                                      orderId: order.id,
                                                       product: productOrdered,
                                                       user: personThatOrdered
                                                           .first)))

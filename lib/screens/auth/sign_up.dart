@@ -2,7 +2,7 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:map_commerce/constants/constants.dart';
+// import 'package:map_commerce/constants/constants.dart';
 import 'package:map_commerce/controllers/auth.dart';
 import 'package:map_commerce/controllers/cloudinary.dart';
 import 'package:map_commerce/utils/image_picker.dart';

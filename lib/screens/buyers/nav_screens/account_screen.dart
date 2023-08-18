@@ -82,39 +82,41 @@ class _AccountScreenState extends State<AccountScreen> {
               const SizedBox(
                 height: 30,
               ),
-              Column(
-                children: tiles
-                    .map((e) => Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: ListTile(
-                            tileColor: Colors.amber.withOpacity(0.3),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0)),
-                            contentPadding: const EdgeInsets.all(6.0),
-                            onTap: () => switch (e['name']) {
-                              "My Account" => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          MyProfile(user: user!))),
-                              "Log Out" => Authentication.signOut(),
-                              _ => ""
-                            },
-                            leading: Icon(
-                              e['icon'],
-                              size: 30,
-                            ),
-                            title: Text(
-                              e['name'],
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                            trailing: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.arrow_forward_outlined)),
-                          ),
-                        ))
-                    .toList(),
-              )
+              ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: tiles.length,
+                  itemBuilder: (context, index) {
+                    final tile = tiles[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        tileColor: Colors.amber.withOpacity(0.3),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0)),
+                        contentPadding: const EdgeInsets.all(6.0),
+                        onTap: () => switch (tile['name']) {
+                          "My Account" => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      MyProfile(userId: userId))),
+                          "Log Out" => Authentication.signOut(),
+                          _ => ""
+                        },
+                        leading: Icon(
+                          tile['icon'],
+                          size: 30,
+                        ),
+                        title: Text(
+                          tile['name'],
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                        trailing: IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.arrow_forward_outlined)),
+                      ),
+                    );
+                  })
             ],
           ),
         ),
