@@ -9,13 +9,9 @@ import 'package:map_commerce/controllers/database.dart';
 import 'package:map_commerce/models/seller_model.dart';
 import 'package:map_commerce/utils/snackbar.dart';
 
-import 'package:uuid/uuid.dart';
-
 class Authentication {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
-
-  static final uid = const Uuid().v1();
 
   static signUserUpWithGoogle() async {
     try {
@@ -56,8 +52,9 @@ class Authentication {
     try {
       UserCredential res = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      final uid = res.user!.uid;
       Seller seller = Seller(
-          userId: res.user!.uid,
+          userId: uid,
           displayName: displayName,
           photoUrl: photoUrl,
           storeName: storeName,

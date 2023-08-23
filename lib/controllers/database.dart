@@ -41,7 +41,7 @@ class Database {
     if (res.additionalUserInfo!.isNewUser) {
       final id = res.user!.uid;
       UserModel user = UserModel(
-          userId: res.user!.uid,
+          userId: id,
           displayName: res.user!.displayName,
           email: res.user!.email,
           imageUrl: res.user!.photoURL);
