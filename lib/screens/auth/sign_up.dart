@@ -15,15 +15,24 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  String image = "";
+  String theImage = "";
   TextEditingController nameController = TextEditingController();
   TextEditingController storeController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
+  // pickImage({required String image}) async {
+  //   ImagePicker pick = ImagePicker();
+  //   XFile? file = await pick.pickImage(source: ImageSource.gallery);
+  //   if (file != null) {
+  //     theImage = file.path;
+  //     // setState(() {});
+  //   }
+  // }
+
   signUp({required BuildContext theContext}) async {
-    String photoUrl = await CloudMethod().saveImageToCloudinary(img: image);
+    String photoUrl = await CloudMethod().saveImageToCloudinary(img: theImage);
     final res = await Authentication.signAdminUpWithEmailAndPassword(
         context: theContext,
         displayName: nameController.text,
@@ -54,7 +63,7 @@ class _SignUpState extends State<SignUp> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      image.isEmpty
+                      theImage.isEmpty
                           ? const SizedBox(
                               height: 200,
                               width: 200,
@@ -66,12 +75,15 @@ class _SignUpState extends State<SignUp> {
                               width: 200,
                               child: Card(
                                 // color: Colors.blue,
-                                child: Image.file(File(image)),
+                                child: Image.file(File(theImage)),
                               ),
                             ),
                       TextButton(
                           onPressed: () {
-                            pickImage(image: image);
+                            final path = pickImage(image: theImage);
+                            setState(() {
+                              theImage = path;
+                            });
                           },
                           child: const Text("Pick image"))
                     ],

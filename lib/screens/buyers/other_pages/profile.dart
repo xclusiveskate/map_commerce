@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:map_commerce/models/user.dart';
 
 class MyProfile extends StatefulWidget {
   final String userId;
