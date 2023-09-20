@@ -104,7 +104,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     )
                   : OutlinedButton(
                       onPressed: () async {
-                        Authentication.signUserUpWithGoogle();
+                        Authentication.signUserUpWithGoogle(context);
                       },
                       child: const Text("Sign up with your google account")),
               const SizedBox(

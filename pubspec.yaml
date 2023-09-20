@@ -54,6 +54,7 @@ dependencies:
   geolocator: ^9.0.2
   flutter_google_places: ^0.3.0
   google_map_place_picker: ^0.0.4
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

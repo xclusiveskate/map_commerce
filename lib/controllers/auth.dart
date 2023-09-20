@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:map_commerce/controllers/database.dart';
 import 'package:map_commerce/models/seller_model.dart';
@@ -13,7 +14,7 @@ class Authentication {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  static signUserUpWithGoogle() async {
+  static signUserUpWithGoogle(BuildContext context) async {
     try {
       if (kIsWeb) {
         final GoogleAuthProvider googleAuthProvider = GoogleAuthProvider();
@@ -22,18 +23,34 @@ class Authentication {
         UserCredential res = await _auth.signInWithPopup(googleAuthProvider);
         Database.saveUserData(res);
       } else {
-        GoogleSignInAccount? gSignIn = await GoogleSignIn().signIn();
+        GoogleSignInAccount? gSignIn = await GoogleSignIn(
+                // scopes: [
+                //   'https://www.googleapis.com/auth/drive',
+                // ],
+                )
+            .signIn();
 
         GoogleSignInAuthentication? gAuth = await gSignIn!.authentication;
 
         OAuthCredential cred = GoogleAuthProvider.credential(
             idToken: gAuth.idToken, accessToken: gAuth.accessToken);
+        print(cred);
 
         UserCredential res = await _auth.signInWithCredential(cred);
         Database.saveUserData(res);
       }
-    } catch (e) {
-      print(e.toString());
+    } on PlatformException catch (e) {
+      if (e.code == GoogleSignIn.kNetworkError) {
+        String errorMessage =
+            "A network error (such as timeout, interrupted connection or unreachable host) has occurred.";
+        // errorCallback(errorMessage);
+        showSnackBar(context: context, message: errorMessage);
+      } else {
+        String errorMessage = "Something went wrong.";
+        // errorCallback(errorMessage);
+        showSnackBar(context: context, message: errorMessage);
+        print(e.message);
+      }
     }
   }
 
