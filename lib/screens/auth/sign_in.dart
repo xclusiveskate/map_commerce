@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:map_commerce/controllers/auth.dart';
 import 'package:map_commerce/provider/admin.change.dart';
+import 'package:map_commerce/provider/sign_in_provider.dart';
 import 'package:map_commerce/screens/auth/sign_up.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,6 +31,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     final isAdmin = context.watch<AdminChanger>();
+    final auth = context.watch<AuthProvider>();
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -95,18 +97,27 @@ class _AuthScreenState extends State<AuthScreen> {
                             height: 20,
                           ),
                           OutlinedButton(
-                              onPressed: () {
-                                signIn();
-                              },
-                              child: const Text("Log in"))
+                              onPressed: auth.isLaoding
+                                  ? null
+                                  : auth.signInAdmin(BuildContext, context,
+                                      emailControl.text, passControl.text),
+                              child: auth.isLaoding == true
+                                  ? CircularProgressIndicator()
+                                  : Text("Log in"))
                         ],
                       ),
                     )
-                  : OutlinedButton(
+                  : ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                          minimumSize:
+                              Size(MediaQuery.of(context).size.width / 2, 60)),
+                      icon: Icon(Icons.logout_outlined),
                       onPressed: () async {
-                        Authentication.signUserUpWithGoogle(context);
+                        auth.signInUser(context);
                       },
-                      child: const Text("Sign up with your google account")),
+                      label: auth.isLaoding == true
+                          ? CircularProgressIndicator()
+                          : Text("Sign up with your google account")),
               const SizedBox(
                 height: 50,
               ),

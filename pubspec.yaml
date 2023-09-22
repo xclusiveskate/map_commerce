@@ -55,6 +55,8 @@ dependencies:
   flutter_google_places: ^0.3.0
   google_map_place_picker: ^0.0.4
   shimmer: ^3.0.0
+  flutter_app_badger: ^1.5.0
+  firebase_analytics: ^10.5.0
 
 dev_dependencies:
   flutter_test:

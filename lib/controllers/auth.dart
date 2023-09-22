@@ -38,6 +38,7 @@ class Authentication {
 
         UserCredential res = await _auth.signInWithCredential(cred);
         Database.saveUserData(res);
+        return res;
       }
     } on PlatformException catch (e) {
       if (e.code == GoogleSignIn.kNetworkError) {
