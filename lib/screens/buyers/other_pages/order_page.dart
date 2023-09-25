@@ -40,7 +40,7 @@ class _OrderPageState extends State<OrderPage> {
           quantity: widget.quantity,
           total: widget.total);
 
-      showSnackBar(
+      showSnack(
           context: context,
           message: 'You order has been submitted successfully');
       Navigator.pushAndRemoveUntil(

@@ -18,10 +18,10 @@ class _AuthScreenState extends State<AuthScreen> {
   TextEditingController emailControl = TextEditingController();
   TextEditingController passControl = TextEditingController();
 
-  signIn() async {
-    await Authentication.signInAdminWithEmail(
-        context: context, email: emailControl.text, password: passControl.text);
-  }
+  // signIn() async {
+  //   await Authentication.signInAdminWithEmail(
+  //       context: context, email: emailControl.text, password: passControl.text);
+  // }
 
   @override
   void initState() {
@@ -97,13 +97,13 @@ class _AuthScreenState extends State<AuthScreen> {
                             height: 20,
                           ),
                           OutlinedButton(
-                              onPressed: auth.isLaoding
-                                  ? null
-                                  : auth.signInAdmin(BuildContext, context,
-                                      emailControl.text, passControl.text),
+                              onPressed: () async {
+                                await auth.signInAdmin(BuildContext, context,
+                                    emailControl.text, passControl.text);
+                              },
                               child: auth.isLaoding == true
-                                  ? CircularProgressIndicator()
-                                  : Text("Log in"))
+                                  ? const CircularProgressIndicator()
+                                  : const Text("Log in"))
                         ],
                       ),
                     )
@@ -111,13 +111,13 @@ class _AuthScreenState extends State<AuthScreen> {
                       style: ElevatedButton.styleFrom(
                           minimumSize:
                               Size(MediaQuery.of(context).size.width / 2, 60)),
-                      icon: Icon(Icons.logout_outlined),
+                      icon: const Icon(Icons.logout_outlined),
                       onPressed: () async {
-                        auth.signInUser(context);
+                        await auth.signInUser(context);
                       },
                       label: auth.isLaoding == true
-                          ? CircularProgressIndicator()
-                          : Text("Sign up with your google account")),
+                          ? const CircularProgressIndicator()
+                          : const Text("Sign up with your google account")),
               const SizedBox(
                 height: 50,
               ),

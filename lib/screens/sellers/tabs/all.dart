@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:map_commerce/constants/constants.dart';
 import 'package:map_commerce/models/product.dart';
 import 'package:map_commerce/provider/admin.change.dart';
+import 'package:map_commerce/provider/products.dart';
 import 'package:map_commerce/screens/buyers/other_pages/product_display.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +28,7 @@ class _AllState extends State<All> {
   @override
   Widget build(BuildContext context) {
     final status = context.watch<AdminChanger>();
+    final products = context.read<ProductProvider>();
     return StreamBuilder<QuerySnapshot<Object?>>(
         stream: productStream,
         builder: (BuildContext context,
@@ -36,27 +38,32 @@ class _AllState extends State<All> {
           } else if (snapshot.hasError) {
             return const Center(child: Text('Unable to load data'));
           } else {
-            final List<QueryDocumentSnapshot<Object?>> gottenProducts =
-                snapshot.data!.docs;
+            final List<Product> gottenProducts =
+                (snapshot.data!.docs as List<QueryDocumentSnapshot<Object?>>)
+                    .map((doc) => Product.fromFirestore(doc))
+                    .toList();
             // print(gottenProducts);
-            List<Product> products = gottenProducts
-                .map((doc) => Product.fromFirestore(doc))
-                .toList();
-            theProducts = products;
+            // List<Product> products = gottenProducts
+            //     .map((doc) => Product.fromFirestore(doc))
+            //     .toList();
+            // theProducts = products;
+            products.updateListOfProduct(gottenProducts);
+
+            final prods = products.products;
 
             return GridView.builder(
                 padding: const EdgeInsets.all(8),
                 primary: false,
                 shrinkWrap: true,
                 // scrollDirection: Axis.vertical,
-                itemCount: products.length,
+                itemCount: prods.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     mainAxisSpacing: 20.0,
                     crossAxisSpacing: 15.0,
                     childAspectRatio: 2 / 2.6),
                 itemBuilder: (context, index) {
-                  final product = products[index];
+                  final product = prods[index];
                   return Container(
                     child: InkWell(
                       onTap: () {

@@ -45,11 +45,11 @@ class Authentication {
         String errorMessage =
             "A network error (such as timeout, interrupted connection or unreachable host) has occurred.";
         // errorCallback(errorMessage);
-        showSnackBar(context: context, message: errorMessage);
+        showSnack(context: context, message: errorMessage);
       } else {
         String errorMessage = "Something went wrong.";
         // errorCallback(errorMessage);
-        showSnackBar(context: context, message: errorMessage);
+        showSnack(context: context, message: errorMessage);
         print(e.message);
       }
     }
@@ -81,7 +81,7 @@ class Authentication {
           password: password);
 
       _db.collection('seller').doc(uid).set(seller.toJson());
-      showSnackBar(
+      showSnack(
           context: context,
           message: 'You have successfully signed up, log in to continue');
     } on FirebaseAuthException catch (e) {
@@ -101,7 +101,7 @@ class Authentication {
           break;
         default:
       }
-      showSnackBar(context: context, message: message);
+      showSnack(context: context, message: message);
     } catch (e) {
       print(e.toString());
     }
@@ -113,7 +113,7 @@ class Authentication {
       required String password}) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-      showSnackBar(context: context, message: "You successfully logged in");
+      showSnack(context: context, message: "You successfully logged in");
     } on FirebaseAuthException catch (e) {
       String message = e.message!;
       switch (e.code) {
@@ -132,9 +132,9 @@ class Authentication {
           break;
         default:
       }
-      showSnackBar(context: context, message: message);
+      showSnack(context: context, message: message);
     } catch (e) {
-      showSnackBar(context: context, message: " Couldn't sign in");
+      showSnack(context: context, message: " Couldn't sign in");
     }
   }
 }
