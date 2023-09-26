@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:map_commerce/constants/constants.dart';
 import 'package:map_commerce/models/product.dart';
 import 'package:map_commerce/provider/admin.change.dart';
 import 'package:map_commerce/provider/products.dart';
@@ -38,10 +37,9 @@ class _AllState extends State<All> {
           } else if (snapshot.hasError) {
             return const Center(child: Text('Unable to load data'));
           } else {
-            final List<Product> gottenProducts =
-                (snapshot.data!.docs as List<QueryDocumentSnapshot<Object?>>)
-                    .map((doc) => Product.fromFirestore(doc))
-                    .toList();
+            final List<Product> gottenProducts = (snapshot.data!.docs)
+                .map((doc) => Product.fromFirestore(doc))
+                .toList();
             // print(gottenProducts);
             // List<Product> products = gottenProducts
             //     .map((doc) => Product.fromFirestore(doc))
@@ -50,6 +48,7 @@ class _AllState extends State<All> {
             products.updateListOfProduct(gottenProducts);
 
             final prods = products.products;
+            print((prods as List).length);
 
             return GridView.builder(
                 padding: const EdgeInsets.all(8),
@@ -127,23 +126,28 @@ class _AllState extends State<All> {
                                     ),
                                   ),
                                   Container(
-                                    height: 25,
-                                    width: 25,
+                                    height: 40,
+                                    width: 30,
                                     decoration: const BoxDecoration(
                                         color: Colors.amber,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(5),
                                             bottomLeft: Radius.circular(5))),
-                                    child: product.availableQuantity == 0
-                                        ? const Icon(
-                                            Icons.lock,
-                                            color: Colors.white,
-                                            size: 15,
-                                          )
-                                        : Text(
-                                            textAlign: TextAlign.center,
-                                            product.availableQuantity
-                                                .toString()),
+                                    child: Column(
+                                      children: [
+                                        const Text("Qty"),
+                                        product.availableQuantity == 0
+                                            ? const Icon(
+                                                Icons.lock,
+                                                color: Colors.white,
+                                                size: 15,
+                                              )
+                                            : Text(
+                                                textAlign: TextAlign.center,
+                                                product.availableQuantity
+                                                    .toString())
+                                      ],
+                                    ),
                                   )
                                 ],
                               ),

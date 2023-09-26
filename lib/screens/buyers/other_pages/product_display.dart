@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:map_commerce/models/product.dart';
-import 'package:map_commerce/screens/buyers/other_pages/order_page.dart';
+import 'package:map_commerce/provider/cart._provider.dart';
+import 'package:provider/provider.dart';
 
 // import 'package:map_commerce/models/product.dart';
 
@@ -24,45 +25,28 @@ class _ProductDisplayState extends State<ProductDisplay> {
     super.initState();
   }
 
-  increaseQuantity() {
-    if (quantity == widget.product.availableQuantity) {
-      return null;
-    } else {
-      setState(() {
-        quantity++;
-        total = widget.product.amount * quantity;
-      });
-    }
-  }
+  // continueButton() {
+  //   if (quantity == 0) {
+  //     return null;
+  //   } else {
+  //     Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //             builder: (context) => OrderPage(
+  //                   quantity: quantity,
+  //                   total: total,
+  //                   product: widget.product,
+  //                 )));
+  //   }
+  // }
 
-  decreaseQuantity() {
-    if (quantity == 0) {
-      return null;
-    } else {
-      setState(() {
-        quantity--;
-        total = total - widget.product.amount;
-      });
-    }
-  }
-
-  continueButton() {
-    if (quantity == 0) {
-      return null;
-    } else {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => OrderPage(
-                    quantity: quantity,
-                    total: total,
-                    product: widget.product,
-                  )));
-    }
-  }
+  addToCart(Product product) {}
 
   @override
   Widget build(BuildContext context) {
+    final cart = context.watch<CartProvider>();
+
+    bool isAdded = cart.cartList.contains(widget.product);
     return Scaffold(
         body: Padding(
       padding: const EdgeInsets.all(8.0),
@@ -171,7 +155,7 @@ class _ProductDisplayState extends State<ProductDisplay> {
                       ),
                       child: IconButton(
                           onPressed: () {
-                            decreaseQuantity();
+                            // decreaseQuantity();
                           },
                           icon: const Icon(Icons.remove))),
                 ),
@@ -191,7 +175,7 @@ class _ProductDisplayState extends State<ProductDisplay> {
                       ),
                       child: IconButton(
                           onPressed: () {
-                            increaseQuantity();
+                            // increaseQuantity();
                           },
                           icon: const Icon(Icons.add))),
                 ),
@@ -248,11 +232,15 @@ class _ProductDisplayState extends State<ProductDisplay> {
                         minimumSize: MaterialStateProperty.all(
                             Size(MediaQuery.of(context).size.width / 1.8, 40))),
                     onPressed: () {
-                      continueButton();
+                      if (isAdded == true) {
+                        cart.removeProductFromCart(widget.product);
+                      } else {
+                        cart.addProductToCart(widget.product);
+                      }
                     },
-                    child: const Text(
-                      "Continue",
-                      style: TextStyle(
+                    child: Text(
+                      isAdded ? "Remove from Cart" : "Add to Cart",
+                      style: const TextStyle(
                           color: Colors.black,
                           fontSize: 18,
                           fontWeight: FontWeight.bold),

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:map_commerce/controllers/auth.dart';
-import 'package:map_commerce/models/user.dart';
+import 'package:map_commerce/models/user_model.dart';
 import 'package:map_commerce/screens/buyers/other_pages/profile.dart';
 
 class AccountScreen extends StatefulWidget {

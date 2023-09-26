@@ -1,10 +1,12 @@
 import 'package:flutter/foundation.dart';
+import 'package:map_commerce/models/cart_model.dart';
 import 'package:map_commerce/models/product.dart';
 
 class CartProvider extends ChangeNotifier {
-  List<Product> _cartList = [];
+  int totalPrice = 0;
+  final List<Product> _cartList = [];
 
-  get cartList => _cartList;
+  List<Product> get cartList => _cartList;
 
   addProductToCart(Product product) {
     _cartList.add(product);
@@ -16,8 +18,30 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  removeAllProductsFromCart(List<Product> list) {
+  removeAllProductsFromCart(List<CartItem> list) {
     _cartList.clear();
     notifyListeners();
+  }
+
+  increaseProductQuantity(CartItem item) {
+    if (quantity == widget.product.availableQuantity) {
+      return null;
+    } else {
+      setState(() {
+        quantity++;
+        total = widget.product.amount * quantity;
+      });
+    }
+  }
+
+  decreaseProductQuantity(CartItem item) {
+    if (quantity == 0) {
+      return null;
+    } else {
+      setState(() {
+        quantity--;
+        total = total - widget.product.amount;
+      });
+    }
   }
 }

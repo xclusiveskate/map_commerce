@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/product.dart';
-import '../models/user.dart';
+import '../models/user_model.dart';
 
 // UserModel? theUser;
 List<UserModel> theUsers = [];

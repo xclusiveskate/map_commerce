@@ -14,7 +14,8 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 36),
+      padding: EdgeInsets.symmetric(
+          horizontal: 8.0, vertical: MediaQuery.of(context).size.height / 15),
       child: SingleChildScrollView(
         child: Column(
           children: [

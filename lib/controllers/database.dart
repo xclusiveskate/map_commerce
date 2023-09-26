@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:map_commerce/models/order.dart';
 import 'package:map_commerce/models/product.dart';
 
-import 'package:map_commerce/models/user.dart';
+import 'package:map_commerce/models/user_model.dart';
 import 'package:uuid/uuid.dart';
 
 class Database {

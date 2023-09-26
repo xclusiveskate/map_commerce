@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:map_commerce/models/product.dart';
-import 'package:map_commerce/models/user.dart';
+import 'package:map_commerce/models/user_model.dart';
 
 class SellerViewOrderDetails extends StatefulWidget {
   final UserModel user;

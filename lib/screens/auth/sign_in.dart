@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:map_commerce/controllers/auth.dart';
 import 'package:map_commerce/provider/admin.change.dart';
 import 'package:map_commerce/provider/sign_in_provider.dart';
 import 'package:map_commerce/screens/auth/sign_up.dart';
