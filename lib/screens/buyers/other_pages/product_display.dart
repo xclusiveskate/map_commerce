@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:map_commerce/models/cart_model.dart';
 import 'package:map_commerce/models/product.dart';
 import 'package:map_commerce/provider/cart._provider.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +19,7 @@ class ProductDisplay extends StatefulWidget {
 }
 
 class _ProductDisplayState extends State<ProductDisplay> {
-  int quantity = 0;
+  // int quantity = 0;
   int total = 0;
   @override
   void initState() {
@@ -45,8 +46,14 @@ class _ProductDisplayState extends State<ProductDisplay> {
   @override
   Widget build(BuildContext context) {
     final cart = context.watch<CartProvider>();
+    final quantity = cart.cartList
+        .firstWhere((item) => item.product == widget.product,
+            orElse: () => CartItem(product: widget.product))
+        .quantity;
 
-    bool isAdded = cart.cartList.contains(widget.product);
+    bool isAdded =
+        cart.cartList.contains((element) => element.product == widget.product);
+    print(isAdded);
     return Scaffold(
         body: Padding(
       padding: const EdgeInsets.all(8.0),
@@ -61,21 +68,16 @@ class _ProductDisplayState extends State<ProductDisplay> {
                     Navigator.pop(context);
                   },
                   icon: const Icon(Icons.arrow_back)),
-              // IconButton(
-              //     onPressed: () {
-              //       setState(() {
-              //         // isLiked = !isLiked;
-              //       });
-              //     },
-              //     icon: isLiked
-              //         ? const Icon(
-              //             Icons.favorite_border,
-              //             color: Colors.grey,
-              //           )
-              //         : const Icon(
-              //             Icons.favorite,
-              //             color: Colors.red,
-              //           ))
+              IconButton(
+                  onPressed: () {
+                    setState(() {
+                      // isLiked = !isLiked;
+                    });
+                  },
+                  icon: const Icon(
+                    Icons.favorite_border,
+                    color: Colors.grey,
+                  ))
             ],
           ),
           Text(
@@ -155,12 +157,13 @@ class _ProductDisplayState extends State<ProductDisplay> {
                       ),
                       child: IconButton(
                           onPressed: () {
-                            // decreaseQuantity();
+                            // cart.decreaseProductQuantity(CartItem(
+                            //     product: widget.product, quantity: quantity));
                           },
                           icon: const Icon(Icons.remove))),
                 ),
                 Text(
-                  quantity.toString(),
+                  cart.quantity.toString(),
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 16),
                 ),
@@ -175,7 +178,8 @@ class _ProductDisplayState extends State<ProductDisplay> {
                       ),
                       child: IconButton(
                           onPressed: () {
-                            // increaseQuantity();
+                            // cart.increaseProductQuantity(CartItem(
+                            //     product: widget.product, quantity: quantity));
                           },
                           icon: const Icon(Icons.add))),
                 ),
@@ -232,11 +236,15 @@ class _ProductDisplayState extends State<ProductDisplay> {
                         minimumSize: MaterialStateProperty.all(
                             Size(MediaQuery.of(context).size.width / 1.8, 40))),
                     onPressed: () {
-                      if (isAdded == true) {
-                        cart.removeProductFromCart(widget.product);
-                      } else {
-                        cart.addProductToCart(widget.product);
-                      }
+                      // if (isAdded == true) {
+                      //   cart.removeProductFromCart(CartItem(
+                      //       product: widget.product, quantity: cart.quantity));
+                      //   print(isAdded);
+                      // } else {
+                      //   cart.addProductToCart(CartItem(
+                      //       product: widget.product, quantity: cart.quantity));
+                      //   print(isAdded);
+                      // }
                     },
                     child: Text(
                       isAdded ? "Remove from Cart" : "Add to Cart",

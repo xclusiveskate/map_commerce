@@ -1,47 +1,50 @@
 import 'package:flutter/foundation.dart';
 import 'package:map_commerce/models/cart_model.dart';
-import 'package:map_commerce/models/product.dart';
 
 class CartProvider extends ChangeNotifier {
   int totalPrice = 0;
-  final List<Product> _cartList = [];
+  int _quantity = 0;
+  final List<CartItem> _cartList = [];
 
-  List<Product> get cartList => _cartList;
+  List<CartItem> get cartList => _cartList;
 
-  addProductToCart(Product product) {
-    _cartList.add(product);
+  int get quantity => _quantity;
+
+//not working
+  addProductToCart(CartItem item) {
+    if (item.quantity > 0) {
+      _cartList.add(item);
+      notifyListeners();
+    }
+  }
+
+//not working
+  removeProductFromCart(CartItem item) {
+    _cartList.remove(item);
     notifyListeners();
   }
 
-  removeProductFromCart(Product product) {
-    _cartList.removeWhere((element) => element.id == product.id);
-    notifyListeners();
-  }
-
+//working
   removeAllProductsFromCart(List<CartItem> list) {
     _cartList.clear();
     notifyListeners();
   }
 
   increaseProductQuantity(CartItem item) {
-    if (quantity == widget.product.availableQuantity) {
-      return null;
-    } else {
-      setState(() {
-        quantity++;
-        total = widget.product.amount * quantity;
-      });
+    if (item.quantity <= item.product.availableQuantity) {
+      notifyListeners();
+      item.quantity++;
+      print(item.quantity);
     }
+    notifyListeners();
   }
 
   decreaseProductQuantity(CartItem item) {
-    if (quantity == 0) {
-      return null;
-    } else {
-      setState(() {
-        quantity--;
-        total = total - widget.product.amount;
-      });
+    if (item.quantity != 0) {
+      notifyListeners();
+      item.quantity--;
+      print(item.quantity);
     }
+    notifyListeners();
   }
 }

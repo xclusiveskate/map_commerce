@@ -26,26 +26,40 @@ class _CartPageState extends State<CartPage> {
               icon: const Icon(Icons.delete))
         ],
       ),
-      body: Column(
-        children: [
-          ListView.builder(
-              shrinkWrap: true,
-              itemCount: cart.cartList.length,
-              itemBuilder: (context, index) {
-                final prod = cart.cartList[index];
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: cart.cartList.length,
+            itemBuilder: (context, index) {
+              final prod = cart.cartList[index];
 
-                return ListTile(
-                  title: Text(prod.name),
-                  trailing: IconButton(
-                      onPressed: () {
-                        cart.removeProductFromCart(prod);
-                      },
-                      icon: const Icon(Icons.delete)),
-                );
-              })
-        ],
+              return ListTile(
+                tileColor: Colors.amber,
+                // contentPadding: EdgeInsets.zero,
+                leading: CircleAvatar(
+                  backgroundImage: NetworkImage(prod.product.imageUrl),
+                ),
+                title: Text(prod.product.name),
+                subtitle: Text(prod.product.amount.toString()),
+                trailing: Column(
+                  children: [
+                    IconButton(
+                        onPressed: () {}, icon: const Icon(Icons.remove)),
+                    Text(prod.quantity.toString()),
+                    IconButton(onPressed: () {}, icon: const Icon(Icons.add))
+                  ],
+                ),
+              );
+            }),
       ),
-      persistentFooterButtons: const [],
+      // persistentFooterButtons: const [],
     );
   }
+
+  //  IconButton(
+  //                     onPressed: () {
+  //                       cart.removeProductFromCart(prod);
+  //                     },
+  //                     icon: const Icon(Icons.delete))
 }

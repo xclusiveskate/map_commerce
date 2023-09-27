@@ -42,4 +42,8 @@ class Product {
       category: data['category'] as String,
     );
   }
+
+  static fromMap(Map<String, dynamic> map) {}
+
+  toMap() {}
 }
