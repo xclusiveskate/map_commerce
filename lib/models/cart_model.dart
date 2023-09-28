@@ -8,7 +8,7 @@ class CartItem {
   int quantity;
   CartItem({
     required this.product,
-    this.quantity = 1,
+    required this.quantity,
   });
 
   CartItem copyWith({

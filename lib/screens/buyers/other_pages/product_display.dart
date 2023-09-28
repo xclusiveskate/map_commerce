@@ -48,7 +48,7 @@ class _ProductDisplayState extends State<ProductDisplay> {
     final cart = context.watch<CartProvider>();
     final quantity = cart.cartList
         .firstWhere((item) => item.product == widget.product,
-            orElse: () => CartItem(product: widget.product))
+            orElse: () => CartItem(product: widget.product, quantity: 0))
         .quantity;
 
     bool isAdded =

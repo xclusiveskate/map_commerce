@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:map_commerce/models/order.dart';
 import 'package:map_commerce/provider/admin.change.dart';
+import 'package:map_commerce/provider/products.dart';
 import 'package:map_commerce/screens/buyers/other_pages/view_history.dart.dart';
 import 'package:map_commerce/screens/sellers/other_pages/view_order_history.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final status = context.watch<AdminChanger>();
+    final prod = context.watch<ProductProvider>();
     return Padding(
       padding:
           EdgeInsets.symmetric(vertical: height / 30, horizontal: width / 40),
@@ -80,7 +82,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             itemBuilder: (context, index) {
                               final order = allOrders[index];
 
-                              final productOrdered = theProducts.firstWhere(
+                              final productOrdered = prod.products.firstWhere(
                                   (element) => element.id == order.productId);
                               final personThatOrdered = theUsers.where(
                                   (element) => element.userId == order.userId);

@@ -3,7 +3,7 @@ import 'package:map_commerce/models/cart_model.dart';
 
 class CartProvider extends ChangeNotifier {
   int totalPrice = 0;
-  int _quantity = 0;
+  final int _quantity = 0;
   final List<CartItem> _cartList = [];
 
   List<CartItem> get cartList => _cartList;
