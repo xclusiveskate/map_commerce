@@ -99,10 +99,19 @@ class _AllState extends State<All> {
                           SizedBox(
                             height: 100,
                             width: 200,
-                            child: product.imageUrl != null
-                                ? ShimmerWidget.rectangle(
-                                    height: 100, width: 200)
-                                : Image.network(product.imageUrl),
+                            child: Image.network(
+                              product.imageUrl,
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                return ShimmerWidget.rectangle(
+                                    height: 100, width: 200);
+                              },
+                              errorBuilder: (context, error, stackTrace) {
+                                return Center(
+                                  child: Text("Unable to load image"),
+                                );
+                              },
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 16.0),
