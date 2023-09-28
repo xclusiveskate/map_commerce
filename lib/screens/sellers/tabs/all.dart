@@ -103,11 +103,11 @@ class _AllState extends State<All> {
                               product.imageUrl,
                               loadingBuilder:
                                   (context, child, loadingProgress) {
-                                return ShimmerWidget.rectangle(
+                                return const ShimmerWidget.rectangle(
                                     height: 100, width: 200);
                               },
                               errorBuilder: (context, error, stackTrace) {
-                                return Center(
+                                return const Center(
                                   child: Text("Unable to load image"),
                                 );
                               },
