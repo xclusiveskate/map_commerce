@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:map_commerce/screens/buyers/other_pages/cart_screen.dart';
 import 'package:map_commerce/screens/sellers/tabs/all.dart';
 import 'package:map_commerce/widgets/row.dart';
 
@@ -27,12 +26,12 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
               secondIcon: GestureDetector(
                   onTap: () {},
                   child: IconButton(
-                      onPressed: () async {
+                      onPressed: () {
                         // await Authentication.signOut();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const CartPage()));
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => const CartPage()));
                       },
                       icon: const Icon(Icons.production_quantity_limits))),
             ),

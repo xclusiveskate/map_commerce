@@ -4,8 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:map_commerce/firebase_options.dart';
 import 'package:map_commerce/provider/admin.change.dart';
-import 'package:map_commerce/provider/cart._provider.dart';
-import 'package:map_commerce/provider/products.dart';
 import 'package:map_commerce/provider/sign_in_provider.dart';
 import 'package:map_commerce/screens/auth/check_user.dart';
 import 'package:provider/provider.dart';
@@ -18,9 +16,9 @@ void main() async {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<AdminChanger>(create: (context) => AdminChanger()),
     ChangeNotifierProvider<AuthProvider>(create: (context) => AuthProvider()),
-    ChangeNotifierProvider<CartProvider>(create: (context) => CartProvider()),
-    ChangeNotifierProvider<ProductProvider>(
-        create: (context) => ProductProvider()),
+    // ChangeNotifierProvider<CartProvider>(create: (context) => CartProvider()),
+    // ChangeNotifierProvider<ProductProvider>(
+    //     create: (context) => ProductProvider()),
   ], child: const MyApp()));
 }
 

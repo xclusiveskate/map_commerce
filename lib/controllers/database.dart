@@ -52,7 +52,7 @@ class Database {
   }
 
   static createOrder(
-      {required String productId,
+      {required Product product,
       required int phoneNumber,
       required String address,
       required String nearbyAddress,
@@ -63,7 +63,7 @@ class Database {
       OrderModel order = OrderModel(
           // id: uid,
           id: uuid,
-          productId: productId,
+          productId: product.id!,
           userId: user,
           dateOfOrder: DateTime.now(),
           deliveryAddress: address,
@@ -76,6 +76,10 @@ class Database {
 
       var theOrder =
           await _db.collection('orders').doc(uuid).set(order.toJson());
+      await _db
+          .collection('products')
+          .doc(product.id)
+          .update({'availableQuantity': product.availableQuantity - quantity});
       return theOrder;
     } catch (e) {
       print(e.toString());

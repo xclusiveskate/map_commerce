@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:map_commerce/models/cart_model.dart';
+
 import 'package:map_commerce/models/product.dart';
-import 'package:map_commerce/provider/cart._provider.dart';
-import 'package:provider/provider.dart';
+
+import 'package:map_commerce/screens/buyers/other_pages/order_page.dart';
 
 // import 'package:map_commerce/models/product.dart';
 
@@ -19,41 +19,53 @@ class ProductDisplay extends StatefulWidget {
 }
 
 class _ProductDisplayState extends State<ProductDisplay> {
-  // int quantity = 0;
+  int quantity = 1;
   int total = 0;
   @override
   void initState() {
     super.initState();
+    total = widget.product.amount * quantity;
   }
 
-  // continueButton() {
-  //   if (quantity == 0) {
-  //     return null;
-  //   } else {
-  //     Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //             builder: (context) => OrderPage(
-  //                   quantity: quantity,
-  //                   total: total,
-  //                   product: widget.product,
-  //                 )));
-  //   }
-  // }
+  decrease() {
+    if (quantity > 1) {
+      quantity--;
+      total = widget.product.amount * quantity;
+      setState(() {});
+    }
+  }
 
-  addToCart(Product product) {}
+  increase() {
+    if (quantity < widget.product.availableQuantity) {
+      quantity++;
+      total = widget.product.amount * quantity;
+      setState(() {});
+    }
+  }
+
+  continueButton() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => OrderPage(
+                  quantity: quantity,
+                  total: total,
+                  product: widget.product,
+                )));
+  }
 
   @override
   Widget build(BuildContext context) {
-    final cart = context.watch<CartProvider>();
-    final quantity = cart.cartList
-        .firstWhere((item) => item.product == widget.product,
-            orElse: () => CartItem(product: widget.product, quantity: 0))
-        .quantity;
+    // final cart = context.watch<CartProvider>();
+    // final quantity = cart.cartList
+    //     .firstWhere((item) => item.product == widget.product,
+    //         orElse: () => CartItem(product: widget.product, quantity: 0))
+    //     .quantity;
 
-    bool isAdded =
-        cart.cartList.contains((element) => element.product == widget.product);
-    print(isAdded);
+    // bool isAdded =
+    //     cart.cartList.any((element) => element.product == widget.product);
+    // print(isAdded);
+
     return Scaffold(
         body: Padding(
       padding: const EdgeInsets.all(8.0),
@@ -156,14 +168,10 @@ class _ProductDisplayState extends State<ProductDisplay> {
                         color: Colors.amber,
                       ),
                       child: IconButton(
-                          onPressed: () {
-                            // cart.decreaseProductQuantity(CartItem(
-                            //     product: widget.product, quantity: quantity));
-                          },
-                          icon: const Icon(Icons.remove))),
+                          onPressed: decrease, icon: const Icon(Icons.remove))),
                 ),
                 Text(
-                  cart.quantity.toString(),
+                  quantity.toString(),
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 16),
                 ),
@@ -177,11 +185,7 @@ class _ProductDisplayState extends State<ProductDisplay> {
                         color: Colors.amber,
                       ),
                       child: IconButton(
-                          onPressed: () {
-                            // cart.increaseProductQuantity(CartItem(
-                            //     product: widget.product, quantity: quantity));
-                          },
-                          icon: const Icon(Icons.add))),
+                          onPressed: increase, icon: const Icon(Icons.add))),
                 ),
               ],
             ),
@@ -235,20 +239,10 @@ class _ProductDisplayState extends State<ProductDisplay> {
                             MaterialStateProperty.all(Colors.amber),
                         minimumSize: MaterialStateProperty.all(
                             Size(MediaQuery.of(context).size.width / 1.8, 40))),
-                    onPressed: () {
-                      // if (isAdded == true) {
-                      //   cart.removeProductFromCart(CartItem(
-                      //       product: widget.product, quantity: cart.quantity));
-                      //   print(isAdded);
-                      // } else {
-                      //   cart.addProductToCart(CartItem(
-                      //       product: widget.product, quantity: cart.quantity));
-                      //   print(isAdded);
-                      // }
-                    },
-                    child: Text(
-                      isAdded ? "Remove from Cart" : "Add to Cart",
-                      style: const TextStyle(
+                    onPressed: continueButton,
+                    child: const Text(
+                      "Continue to Check Out",
+                      style: TextStyle(
                           color: Colors.black,
                           fontSize: 18,
                           fontWeight: FontWeight.bold),

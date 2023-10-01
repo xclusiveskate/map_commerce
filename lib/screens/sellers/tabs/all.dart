@@ -2,10 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:map_commerce/models/product.dart';
 import 'package:map_commerce/provider/admin.change.dart';
-import 'package:map_commerce/provider/products.dart';
 import 'package:map_commerce/screens/buyers/other_pages/product_display.dart';
 import 'package:map_commerce/utils/shimmer.dart';
-import 'package:map_commerce/widgets/shimmer_widget.dart';
 import 'package:provider/provider.dart';
 
 class All extends StatefulWidget {
@@ -29,7 +27,7 @@ class _AllState extends State<All> {
   @override
   Widget build(BuildContext context) {
     final status = context.watch<AdminChanger>();
-    final products = context.read<ProductProvider>();
+
     return StreamBuilder<QuerySnapshot<Object?>>(
         stream: productStream,
         builder: (BuildContext context,
@@ -47,24 +45,24 @@ class _AllState extends State<All> {
             //     .map((doc) => Product.fromFirestore(doc))
             //     .toList();
             // theProducts = products;
-            products.updateListOfProduct(gottenProducts);
+            // products.updateListOfProduct(gottenProducts);
 
-            final prods = products.products;
-            print((prods as List).length);
+            // final prods = products.products;
+            // print((prods as List).length);
 
             return GridView.builder(
                 padding: const EdgeInsets.all(8),
                 primary: false,
                 shrinkWrap: true,
                 // scrollDirection: Axis.vertical,
-                itemCount: prods.length,
+                itemCount: gottenProducts.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     mainAxisSpacing: 20.0,
                     crossAxisSpacing: 20.0,
                     childAspectRatio: 2 / 2.6),
                 itemBuilder: (context, index) {
-                  final product = prods[index];
+                  final product = gottenProducts[index];
                   return InkWell(
                     onTap: () {
                       status.isAdmin!
@@ -101,11 +99,12 @@ class _AllState extends State<All> {
                             width: 200,
                             child: Image.network(
                               product.imageUrl,
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                return const ShimmerWidget.rectangle(
-                                    height: 100, width: 200);
-                              },
+                              // loadingBuilder:
+                              //     (context, child, loadingProgress) {
+                              //   return Center(child: Text("Image loading"));
+                              //   //  const ShimmerWidget.rectangle(
+                              //   //     height: 100, width: 200);
+                              // },
                               errorBuilder: (context, error, stackTrace) {
                                 return const Center(
                                   child: Text("Unable to load image"),

@@ -33,7 +33,7 @@ class _OrderPageState extends State<OrderPage> {
   createOrder() async {
     try {
       await Database.createOrder(
-          productId: widget.product.id!,
+          product: widget.product,
           phoneNumber: int.parse(phoneController.text),
           address: addressController.text,
           nearbyAddress: googleAddressController.text,
@@ -55,55 +55,144 @@ class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: const Text("Contact information page "),
+        title: const Text("CheckOut Page "),
+        centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Padding(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Additional Information",
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: addressController,
+                    decoration: const InputDecoration(
+                        labelText: "input your current/delivery address"),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: googleAddressController,
+                    readOnly: true,
+                    onTap: () async {
+                      final value = await googleAutoPlace();
+                      if (value!.isNotEmpty) {
+                        print("pciked address: $value");
+                        setState(() {
+                          googleAddressController.text = value;
+                        });
+                      }
+                    },
+                    decoration: const InputDecoration(
+                        labelText: "Tap to pick a nearby location"),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: phoneController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                        labelText: "input your  phone number"),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Card(
+            elevation: 1,
+            shadowColor: Colors.amber,
+            shape:
+                const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+            child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: addressController,
-                decoration: const InputDecoration(
-                    labelText: "input your current/delivery address"),
+              child: Column(
+                children: [
+                  const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Order Summary",
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                  ListTile(
+                    title: const Text("Product:"),
+                    trailing: Text(
+                      widget.product.name,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  ListTile(
+                    title: const Text("Quantity:"),
+                    trailing: Text(
+                      widget.quantity.toString(),
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  ListTile(
+                    title: const Text("price:"),
+                    trailing: Text(
+                      '\$${widget.product.amount.toString()}/ qty',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: googleAddressController,
-                readOnly: true,
-                onTap: () async {
-                  final value = await googleAutoPlace();
-                  if (value!.isNotEmpty) {
-                    print("pciked address: $value");
-                    setState(() {
-                      googleAddressController.text = value;
-                    });
-                  }
-                },
-                decoration: const InputDecoration(
-                    labelText: "Tap to pick a nearby location"),
-              ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  "\$${widget.total.toString()}",
+                  style: const TextStyle(
+                      fontSize: 26, fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize:
+                            Size(MediaQuery.of(context).size.width / 1.5, 50),
+                      ),
+                      onPressed: () {
+                        createOrder();
+                      },
+                      child: const Text(
+                        "Complete Order",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      )),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: phoneController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                    labelText: "input your  phone number"),
-              ),
-            ),
-            OutlinedButton(
-                onPressed: () {
-                  createOrder();
-                },
-                child: const Text("Complete Order"))
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
