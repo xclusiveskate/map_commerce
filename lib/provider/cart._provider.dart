@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:map_commerce/models/cart_model.dart';
 
 class CartProvider extends ChangeNotifier {
-  final List<CartItem> _cartList = [];
+  List<CartItem> _cartList = [];
   // bool _isAdded = false;
 
   List<CartItem> get cartList => _cartList;
@@ -14,14 +14,28 @@ class CartProvider extends ChangeNotifier {
 
 //not working
   addProductToCart(CartItem item) {
-    _cartList.add(item);
-    notifyListeners();
+    var inCart = _cartList.contains(item);
+
+    inCart ? increaseProdroductQTy(item) : addProdroduct(item);
     print(_cartList);
+
+    notifyListeners();
+  }
+
+  addProdroduct(CartItem item) {
+    _cartList.add(item);
+  }
+
+  increaseProdroductQTy(CartItem item) {
+    _cartList = _cartList
+        .map((CartItem e) => e.product.id == item.product.id ? e.quantity++ : e)
+        .toList() as List<CartItem>;
+    notifyListeners();
   }
 
 //not working
   removeProductFromCart(CartItem item) {
-    _cartList.remove(item);
+    _cartList.removeWhere((itm) => itm.product.id == item.product.id);
     notifyListeners();
     print(_cartList);
   }

@@ -7,26 +7,14 @@ import 'package:map_commerce/provider/products.dart';
 import 'package:map_commerce/screens/buyers/other_pages/view_history.dart.dart';
 import 'package:map_commerce/screens/sellers/other_pages/view_order_history.dart';
 import 'package:provider/provider.dart';
-import '../../../constants/constants.dart';
 
-class OrdersScreen extends StatefulWidget {
+class OrdersScreen extends StatelessWidget {
   const OrdersScreen({super.key});
 
   @override
-  State<OrdersScreen> createState() => _OrdersScreenState();
-}
-
-class _OrdersScreenState extends State<OrdersScreen> {
-  final orderStream =
-      FirebaseFirestore.instance.collection('orders').snapshots();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final orderStream =
+        FirebaseFirestore.instance.collection('orders').snapshots();
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final status = context.watch<AdminChanger>();
@@ -82,10 +70,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             itemBuilder: (context, index) {
                               final order = allOrders[index];
 
-                              final productOrdered = prod.products.firstWhere(
-                                  (element) => element.id == order.productId);
-                              final personThatOrdered = theUsers.where(
-                                  (element) => element.userId == order.userId);
+                              // final productOrdered = prod.products.firstWhere(
+                              //     (element) => element.id == order.productId);
+                              // final personThatOrdered = theUsers.where(
+                              //     (element) => element.userId == order.userId);
                               // final theDate = order.dateOfOrder;
                               // final date = DateFormat.yMMMMd().format(theDate);
 
@@ -114,7 +102,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                               builder: (context) =>
                                                   SellerViewOrderDetails(
                                                       orderId: order.id,
-                                                      product: productOrdered,
+                                                      product: order.product,
                                                       user: personThatOrdered
                                                           .first)))
                                       : Navigator.push(
@@ -122,7 +110,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   BuyerOrderDetails(
-                                                      product: productOrdered,
+                                                      product: order.product,
                                                       order: order)));
                                 },
                                 leading: Column(
@@ -133,7 +121,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                     Text(order.quantity.toString())
                                   ],
                                 ),
-                                title: Text(productOrdered.name),
+                                title: Text(order.product.name),
                                 subtitle: Text(
                                     "Total Amount : \$${order.totalAmount.toString()}"),
                                 trailing: order.isDelivered == true

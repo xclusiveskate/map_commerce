@@ -6,9 +6,10 @@ import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:map_commerce/constants/constants.dart';
 import 'package:map_commerce/controllers/database.dart';
+import 'package:map_commerce/controllers/payment.dart';
 import 'package:map_commerce/models/product.dart';
-import 'package:map_commerce/screens/buyers/buyer.dart';
 import 'package:google_maps_webservice/places.dart' as serv;
+import 'package:map_commerce/screens/buyers/other_pages/status_page.dart';
 import 'package:map_commerce/utils/snackbar.dart';
 
 class OrderPage extends StatefulWidget {
@@ -39,14 +40,6 @@ class _OrderPageState extends State<OrderPage> {
           nearbyAddress: googleAddressController.text,
           quantity: widget.quantity,
           total: widget.total);
-
-      showSnack(
-          context: context,
-          message: 'You order has been submitted successfully');
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const MainScreen()),
-          (route) => false);
     } catch (e) {
       print(e.toString());
     }
@@ -60,139 +53,178 @@ class _OrderPageState extends State<OrderPage> {
         title: const Text("CheckOut Page "),
         centerTitle: true,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Additional Information",
-                      style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 36.0),
+              child: Container(
+                child: Column(
+                  children: [
+                    const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Additional Information",
+                          style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        controller: addressController,
+                        decoration: const InputDecoration(
+                            labelText: "input your current/delivery address"),
                       ),
-                    )),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: addressController,
-                    decoration: const InputDecoration(
-                        labelText: "input your current/delivery address"),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: googleAddressController,
-                    readOnly: true,
-                    onTap: () async {
-                      final value = await googleAutoPlace();
-                      if (value!.isNotEmpty) {
-                        print("pciked address: $value");
-                        setState(() {
-                          googleAddressController.text = value;
-                        });
-                      }
-                    },
-                    decoration: const InputDecoration(
-                        labelText: "Tap to pick a nearby location"),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: phoneController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                        labelText: "input your  phone number"),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Card(
-            elevation: 1,
-            shadowColor: Colors.amber,
-            shape:
-                const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Order Summary",
-                        style: TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )),
-                  ListTile(
-                    title: const Text("Product:"),
-                    trailing: Text(
-                      widget.product.name,
-                      style: TextStyle(fontSize: 16),
                     ),
-                  ),
-                  ListTile(
-                    title: const Text("Quantity:"),
-                    trailing: Text(
-                      widget.quantity.toString(),
-                      style: TextStyle(fontSize: 16),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        controller: googleAddressController,
+                        readOnly: true,
+                        onTap: () async {
+                          final value = await googleAutoPlace();
+                          if (value!.isNotEmpty) {
+                            print("pciked address: $value");
+                            setState(() {
+                              googleAddressController.text = value;
+                            });
+                          }
+                        },
+                        decoration: const InputDecoration(
+                            labelText: "Tap to pick a nearby location"),
+                      ),
                     ),
-                  ),
-                  ListTile(
-                    title: const Text("price:"),
-                    trailing: Text(
-                      '\$${widget.product.amount.toString()}/ qty',
-                      style: TextStyle(fontSize: 16),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        controller: phoneController,
+                        keyboardType: TextInputType.numberWithOptions(),
+                        decoration: const InputDecoration(
+                            labelText: "input your  phone number"),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text(
-                  "\$${widget.total.toString()}",
-                  style: const TextStyle(
-                      fontSize: 26, fontWeight: FontWeight.bold),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize:
-                            Size(MediaQuery.of(context).size.width / 1.5, 50),
-                      ),
-                      onPressed: () {
-                        createOrder();
-                      },
-                      child: const Text(
-                        "Complete Order",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      )),
-                ),
-              ],
+            const SizedBox(
+              height: 10,
             ),
-          )
-        ],
+            Card(
+              elevation: 1,
+              shadowColor: Colors.amber,
+              shape:
+                  const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Order Summary",
+                          style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
+                    ListTile(
+                      title: const Text("Product:"),
+                      trailing: Text(
+                        widget.product.name,
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    ListTile(
+                      title: const Text("Quantity:"),
+                      trailing: Text(
+                        widget.quantity.toString(),
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    ListTile(
+                      title: const Text("price:"),
+                      trailing: Text(
+                        '\$${widget.product.amount.toString()}/ qty',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 55,
+            ),
+            Container(
+              color: Colors.purple.withOpacity(0.05),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      "\$${widget.total.toString()}",
+                      style: const TextStyle(
+                          fontSize: 26, fontWeight: FontWeight.bold),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                              minimumSize: Size(
+                                  MediaQuery.of(context).size.width / 1.5, 50),
+                              backgroundColor: Colors.amber),
+                          onPressed: () async {
+                            if (addressController.text.isNotEmpty &&
+                                googleAddressController.text.isNotEmpty &&
+                                phoneController.text.isNotEmpty) {
+                              final res =
+                                  await paymentMethod.payWithFlutterWave(
+                                      context: context,
+                                      amount: '${widget.total.toString()}',
+                                      email: 'abdullahiafolabi08@gmail.com');
+                              print(
+                                  ' payment status : ${res.status} : ${res.ref}');
+
+                              if (res.status) {
+                                if (context.mounted) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              PaymentStatusPage(
+                                                response: res,
+                                                amount: widget.total,
+                                              )));
+                                }
+                              }
+                            } else {
+                              showSnack(
+                                  context: context,
+                                  message:
+                                      'fill all the additional information fields above');
+                            }
+                            // createOrder();
+                          },
+                          icon: Icon(Icons.payment),
+                          label: const Text(
+                            "Proceed to Payment",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          )),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

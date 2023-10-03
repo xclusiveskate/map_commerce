@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:map_commerce/models/product.dart';
 
 class OrderModel {
   final String id;
-  final String productId;
+  final Product product;
   final String userId;
   final DateTime dateOfOrder;
   final String deliveryAddress;
@@ -14,7 +15,7 @@ class OrderModel {
   final bool isDelivered;
   OrderModel({
     required this.id,
-    required this.productId,
+    required this.product,
     required this.userId,
     required this.dateOfOrder,
     required this.deliveryAddress,
@@ -29,7 +30,7 @@ class OrderModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'productId': productId,
+      'productId': product,
       'userId': userId,
       'dateOfOrder': dateOfOrder.toIso8601String(),
       'deliveryAddress': deliveryAddress,
@@ -46,7 +47,7 @@ class OrderModel {
     final data = documents.data() as Map;
     return OrderModel(
         id: data['id'] as String,
-        productId: data['productId'] as String,
+        product: data['product'] as Product,
         userId: data['userId'] as String,
         dateOfOrder: DateTime.parse(data['dateOfOrder']),
         deliveryAddress: data['deliveryAddress'] as String,
@@ -71,7 +72,7 @@ class OrderModel {
   }) {
     return OrderModel(
         id: id ?? this.id,
-        productId: productId ?? this.productId,
+        product: product,
         userId: userId ?? this.userId,
         dateOfOrder: dateOfOrder ?? this.dateOfOrder,
         deliveryAddress: deliveryAddress ?? this.deliveryAddress,
