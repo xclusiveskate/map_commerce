@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:map_commerce/constants/constants.dart';
 import 'package:map_commerce/models/order.dart';
 import 'package:map_commerce/provider/admin.change.dart';
 import 'package:map_commerce/provider/products.dart';
@@ -72,8 +73,8 @@ class OrdersScreen extends StatelessWidget {
 
                               // final productOrdered = prod.products.firstWhere(
                               //     (element) => element.id == order.productId);
-                              // final personThatOrdered = theUsers.where(
-                              //     (element) => element.userId == order.userId);
+                              final personThatOrdered = theUsers.where(
+                                  (element) => element.userId == order.userId);
                               // final theDate = order.dateOfOrder;
                               // final date = DateFormat.yMMMMd().format(theDate);
 

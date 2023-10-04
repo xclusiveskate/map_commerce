@@ -31,7 +31,7 @@ class _OrderPageState extends State<OrderPage> {
   TextEditingController googleAddressController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
-  createOrder() async {
+  createOrder(txid) async {
     try {
       await Database.createOrder(
           product: widget.product,
@@ -39,6 +39,7 @@ class _OrderPageState extends State<OrderPage> {
           address: addressController.text,
           nearbyAddress: googleAddressController.text,
           quantity: widget.quantity,
+          transId: txid,
           total: widget.total);
     } catch (e) {
       print(e.toString());
@@ -193,6 +194,7 @@ class _OrderPageState extends State<OrderPage> {
                                   ' payment status : ${res.status} : ${res.ref}');
 
                               if (res.status) {
+                                createOrder(res.ref);
                                 if (context.mounted) {
                                   Navigator.push(
                                       context,

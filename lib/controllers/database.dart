@@ -30,7 +30,7 @@ class Database {
           category: category);
 
       var prod =
-          await _db.collection('products').doc(uid).set(product.toJson());
+          await _db.collection('products').doc(uid).set(product.toFirestore());
       return prod;
     } on FirebaseException catch (e) {
       print(e.message);
@@ -57,25 +57,27 @@ class Database {
       required String address,
       required String nearbyAddress,
       required int quantity,
+      required transId,
       required int total}) async {
     try {
       final uuid = const Uuid().v1();
       OrderModel order = OrderModel(
           // id: uid,
           id: uuid,
-          productId: product.id!,
+          product: product,
           userId: user,
           dateOfOrder: DateTime.now(),
           deliveryAddress: address,
           nearbyDeliveryAddress: nearbyAddress,
           contactInfo: phoneNumber,
           quantity: quantity,
+          paymentId: transId,
           totalAmount: total,
           dateDelivered: null,
           isDelivered: false);
 
       var theOrder =
-          await _db.collection('orders').doc(uuid).set(order.toJson());
+          await _db.collection('orders').doc(uuid).set(order.toFirestore());
       await _db
           .collection('products')
           .doc(product.id)

@@ -18,7 +18,7 @@ class Product {
     required this.category,
   });
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toFirestore() {
     return {
       'id': id,
       'name': name,
