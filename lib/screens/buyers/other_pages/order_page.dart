@@ -194,8 +194,8 @@ class _OrderPageState extends State<OrderPage> {
                                   ' payment status : ${res.status} : ${res.ref}');
 
                               if (res.status) {
-                                createOrder(res.ref);
                                 if (context.mounted) {
+                                  createOrder(res.ref);
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(

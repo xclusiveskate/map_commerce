@@ -28,7 +28,7 @@ class _AllState extends State<All> {
   @override
   Widget build(BuildContext context) {
     final status = context.watch<AdminChanger>();
-    final product = context.read<ProductProvider>();
+    final product = context.watch<ProductProvider>();
 
     return StreamBuilder<QuerySnapshot<Object?>>(
         stream: productStream,
@@ -47,7 +47,9 @@ class _AllState extends State<All> {
             //     .map((doc) => Product.fromFirestore(doc))
             //     .toList();
             // theProducts = products;
-            product.updateListOfProduct(gottenProducts);
+            if (context.mounted) {
+              product.updateListOfProduct(gottenProducts);
+            }
 
             // final prods = products.products;
             // print((prods as List).length);

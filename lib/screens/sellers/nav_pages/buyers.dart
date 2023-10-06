@@ -42,26 +42,28 @@ class _SellerUsersScreenState extends State<SellerUsersScreen> {
                     ConnectionState.waiting) {
                   return const CircularProgressIndicator();
                 } else {
-                  final List<QueryDocumentSnapshot> gottenUsers =
-                      snapshot.data!.docs;
+                  final List<UserModel> gottenUsers =
+                      (snapshot.data!.docs as List<QueryDocumentSnapshot>)
+                          .map((e) => UserModel.fromFirestore(e))
+                          .toList();
 
-                  List<UserModel> users = gottenUsers
-                      .map((doc) => UserModel.fromFirestore(doc))
-                      .toList();
+                  print(gottenUsers.length);
 
-                  theUsers = users;
+                  theUsers = gottenUsers;
 
-                  return users.isEmpty
+                  return gottenUsers.isEmpty
                       ? const Center(child: Text("No active user "))
                       : ListView.builder(
                           shrinkWrap: true,
-                          itemCount: users.length,
+                          itemCount: gottenUsers.length,
                           itemBuilder: (context, index) {
-                            var user = users[index];
+                            var user = gottenUsers[index];
                             // var theDate = order.dateOfOrder;
                             // final date = DateFormat.yMMMMd().format(theDate);
                             return ListTile(
-                                onTap: () {},
+                                onTap: () {
+                                  print(gottenUsers.length);
+                                },
                                 leading: CircleAvatar(
                                   child: Image.network(user.imageUrl!),
                                 ),

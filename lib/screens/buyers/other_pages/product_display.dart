@@ -75,8 +75,9 @@ class _ProductDisplayState extends State<ProductDisplay> {
             IconButton(
                 onPressed: () {
                   cart.addProductToCart(CartItem(product: widget.product));
+                  print(cart.cartList);
                 },
-                icon: Icon(Icons.add))
+                icon: const Icon(Icons.add))
           ],
         ),
         body: Padding(
