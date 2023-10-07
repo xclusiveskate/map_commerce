@@ -15,10 +15,8 @@ class CartProvider extends ChangeNotifier {
     var test = _cartList
         .firstWhereOrNull((element) => element.product.id == item.product.id);
     test is CartItem ? increaseProdroductQTy(item) : addProdroduct(item);
-    notifyListeners();
   }
 
-//working
   addProdroduct(CartItem item) {
     _cartList.add(item);
     notifyListeners();
@@ -40,52 +38,45 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-//working
   removeProductFromCart(CartItem item) {
     _cartList.removeWhere((itm) => itm.product.id == item.product.id);
     notifyListeners();
     print(_cartList);
   }
 
-//working
   removeAllProductsFromCart() {
     _cartList.clear();
     notifyListeners();
   }
 
-//consoling but not displaying
   double getTotalPrice() {
     double total = 0.0;
     for (var item in _cartList) {
       total += item.product.amount * item.quantity;
       print(total);
-      // notifyListeners();
     }
     return total;
   }
 
-  // increaseProductQuantity(CartItem item) {
-  //   if (item.quantity <= item.product.availableQuantity) {
-  //     notifyListeners();
-  //     item.quantity++;
-  //     print(item.quantity);
-  //   }
-  //   notifyListeners();
-  // }
+  increaseProductQuantity(CartItem item) {
+    if (item.quantity < item.product.availableQuantity) {
+      item.quantity++;
+      print(item.quantity);
+    }
+    notifyListeners();
+  }
 
-  // decreaseProductQuantity(Product product, int newQuantity) {
-
-  //   int theQuantity = _cartList
-  //       .firstWhere(
-  //         (item) => item.product == product,
-  //         orElse: () => CartItem(product: product, quantity: 0),
-  //       )
-  //       .quantity;
-  //   if (item.quantity != 0) {
-  //     notifyListeners();
-  //     item.quantity--;
-  //     print(item.quantity);
-  //   }
-  //   notifyListeners();
-  // }
+//done
+  decreaseProductQuantity(CartItem item) {
+    // int theQuantity = _cartList
+    //     .firstWhereOrNull(
+    //       (itm) => itm.product == item.product,
+    //     )!
+    //     .quantity;
+    if (item.quantity != 1) {
+      item.quantity--;
+      print(item.quantity);
+    }
+    notifyListeners();
+  }
 }

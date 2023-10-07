@@ -55,7 +55,7 @@ class _OrderPageState extends State<OrderPage> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -104,7 +104,7 @@ class _OrderPageState extends State<OrderPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
                         controller: phoneController,
-                        keyboardType: TextInputType.numberWithOptions(),
+                        keyboardType: const TextInputType.numberWithOptions(),
                         decoration: const InputDecoration(
                             labelText: "input your  phone number"),
                       ),
@@ -138,21 +138,21 @@ class _OrderPageState extends State<OrderPage> {
                       title: const Text("Product:"),
                       trailing: Text(
                         widget.product.name,
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                     ),
                     ListTile(
                       title: const Text("Quantity:"),
                       trailing: Text(
                         widget.quantity.toString(),
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                     ),
                     ListTile(
                       title: const Text("price:"),
                       trailing: Text(
                         '\$${widget.product.amount.toString()}/ qty',
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                     ),
                   ],
@@ -188,7 +188,7 @@ class _OrderPageState extends State<OrderPage> {
                               final res =
                                   await paymentMethod.payWithFlutterWave(
                                       context: context,
-                                      amount: '${widget.total.toString()}',
+                                      amount: widget.total.toString(),
                                       email: 'abdullahiafolabi08@gmail.com');
                               print(
                                   ' payment status : ${res.status} : ${res.ref}');
@@ -214,7 +214,7 @@ class _OrderPageState extends State<OrderPage> {
                             }
                             // createOrder();
                           },
-                          icon: Icon(Icons.payment),
+                          icon: const Icon(Icons.payment),
                           label: const Text(
                             "Proceed to Payment",
                             style: TextStyle(

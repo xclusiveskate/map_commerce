@@ -34,29 +34,29 @@ class _PaymentStatusPageState extends State<PaymentStatusPage> {
                   backgroundColor:
                       widget.response.status ? Colors.green : Colors.red,
                   child: widget.response.status
-                      ? Icon(
+                      ? const Icon(
                           Icons.done_outline_sharp,
                           color: Colors.white,
                         )
-                      : Icon(
+                      : const Icon(
                           Icons.sms_failed,
                           color: Colors.white,
                         )),
               widget.response.status
                   ? Text("Your payment of \$${widget.amount} is succeful.")
-                  : Text("Payment failed"),
+                  : const Text("Payment failed"),
               ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.amber,
-                      minimumSize: Size(double.infinity, 50)),
+                      minimumSize: const Size(double.infinity, 50)),
                   onPressed: () {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const MainScreen()));
                   },
-                  icon: Icon(Icons.home),
-                  label: Text("Back to Home"))
+                  icon: const Icon(Icons.home),
+                  label: const Text("Back to Home"))
             ],
           ),
         ),
