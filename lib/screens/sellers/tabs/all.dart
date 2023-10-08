@@ -1,14 +1,22 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:map_commerce/models/cart_model.dart';
+import 'package:map_commerce/provider/cart._provider.dart';
+import 'package:map_commerce/screens/sellers/other_pages/add_product.dart';
+import 'package:map_commerce/utils/snackbar.dart';
+import 'package:provider/provider.dart';
+
 import 'package:map_commerce/models/product.dart';
 import 'package:map_commerce/provider/admin.change.dart';
 import 'package:map_commerce/provider/products.dart';
 import 'package:map_commerce/screens/buyers/other_pages/product_display.dart';
 import 'package:map_commerce/utils/shimmer.dart';
-import 'package:provider/provider.dart';
 
 class All extends StatefulWidget {
-  const All({super.key});
+  const All({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<All> createState() => _AllState();
@@ -29,6 +37,7 @@ class _AllState extends State<All> {
   Widget build(BuildContext context) {
     final status = context.watch<AdminChanger>();
     final product = context.watch<ProductProvider>();
+    final cart = context.watch<CartProvider>();
 
     return StreamBuilder<QuerySnapshot<Object?>>(
         stream: productStream,
@@ -47,7 +56,7 @@ class _AllState extends State<All> {
             //     .map((doc) => Product.fromFirestore(doc))
             //     .toList();
             // theProducts = products;
-            if (context.mounted) {
+            if (mounted) {
               product.updateListOfProduct(gottenProducts);
             }
 
@@ -64,9 +73,9 @@ class _AllState extends State<All> {
                     crossAxisCount: 2,
                     mainAxisSpacing: 20.0,
                     crossAxisSpacing: 20.0,
-                    childAspectRatio: 2 / 2.6),
+                    childAspectRatio: 2 / 2.75),
                 itemBuilder: (context, index) {
-                  final product = gottenProducts[index];
+                  Product product = gottenProducts[index];
                   return GestureDetector(
                     onTap: () {
                       status.isAdmin!
@@ -165,7 +174,22 @@ class _AllState extends State<All> {
                                 )
                               ],
                             ),
-                          )
+                          ),
+                          !status.isAdmin
+                              ? Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: IconButton(
+                                      color: Colors.amber,
+                                      splashColor: Colors.amber,
+                                      focusColor: Colors.amber,
+                                      hoverColor: Colors.green,
+                                      onPressed: () {
+                                        cart.addProductToCart(context,
+                                            CartItem(product: product));
+                                      },
+                                      icon: Icon(Icons.add)),
+                                )
+                              : SizedBox.shrink()
                         ],
                       ),
                     ),

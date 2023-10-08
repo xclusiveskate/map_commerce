@@ -1,20 +1,22 @@
 // ignore_for_file: avoid_print, depend_on_referenced_packages
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:map_commerce/models/cart_model.dart';
 import 'package:collection/collection.dart';
+import 'package:map_commerce/utils/snackbar.dart';
 
 class CartProvider extends ChangeNotifier {
   List<CartItem> _cartList = [];
 
   List<CartItem> get cartList => _cartList;
 
-//not working
-  addProductToCart(CartItem item) {
+  addProductToCart(BuildContext context, CartItem item) {
     // var inCart = _cartList.contains(item);
     var test = _cartList
         .firstWhereOrNull((element) => element.product.id == item.product.id);
-    test is CartItem ? increaseProdroductQTy(item) : addProdroduct(item);
+    test is CartItem ? increaseProductQTy(context, item) : addProdroduct(item);
+    return test;
   }
 
   addProdroduct(CartItem item) {
@@ -23,18 +25,12 @@ class CartProvider extends ChangeNotifier {
   }
 
   //not listening from cart
-  increaseProdroductQTy(CartItem item) {
+  increaseProductQTy(BuildContext context, CartItem item) {
     _cartList = _cartList
         .map((CartItem e) => e.product.id == item.product.id ? e.quantity++ : e)
         .toList() as List<CartItem>;
-    notifyListeners();
-  }
-
-//not listening from cart until refresh
-  decrease(CartItem item) {
-    _cartList = _cartList
-        .map((CartItem e) => e.product.id == item.product.id ? e.quantity-- : e)
-        .toList() as List<CartItem>;
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text("product added")));
     notifyListeners();
   }
 
@@ -49,15 +45,6 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  double getTotalPrice() {
-    double total = 0.0;
-    for (var item in _cartList) {
-      total += item.product.amount * item.quantity;
-      print(total);
-    }
-    return total;
-  }
-
   increaseProductQuantity(CartItem item) {
     if (item.quantity < item.product.availableQuantity) {
       item.quantity++;
@@ -66,17 +53,20 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-//done
   decreaseProductQuantity(CartItem item) {
-    // int theQuantity = _cartList
-    //     .firstWhereOrNull(
-    //       (itm) => itm.product == item.product,
-    //     )!
-    //     .quantity;
     if (item.quantity != 1) {
       item.quantity--;
       print(item.quantity);
     }
     notifyListeners();
+  }
+
+  double getTotalPrice() {
+    double total = 0.0;
+    for (var item in _cartList) {
+      total += item.product.amount * item.quantity;
+      print(total);
+    }
+    return total;
   }
 }
