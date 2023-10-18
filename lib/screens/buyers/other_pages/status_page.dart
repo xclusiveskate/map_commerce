@@ -8,7 +8,7 @@ import 'package:map_commerce/screens/buyers/buyer.dart';
 
 class PaymentStatusPage extends StatefulWidget {
   PaymentResponse response;
-  int amount;
+  double amount;
   PaymentStatusPage({
     Key? key,
     required this.response,

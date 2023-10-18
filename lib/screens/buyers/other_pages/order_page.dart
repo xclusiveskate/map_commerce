@@ -5,22 +5,24 @@ import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:map_commerce/constants/constants.dart';
+import 'package:google_maps_webservice/places.dart' as serv;
 import 'package:map_commerce/controllers/database.dart';
 import 'package:map_commerce/controllers/payment.dart';
-import 'package:map_commerce/models/product.dart';
-import 'package:google_maps_webservice/places.dart' as serv;
+import 'package:map_commerce/provider/cart._provider.dart';
 import 'package:map_commerce/screens/buyers/other_pages/status_page.dart';
 import 'package:map_commerce/utils/snackbar.dart';
+import 'package:provider/provider.dart';
 
 class OrderPage extends StatefulWidget {
-  final int quantity;
-  final int total;
-  final Product product;
-  const OrderPage(
-      {super.key,
-      required this.quantity,
-      required this.total,
-      required this.product});
+  // final int quantity;
+  // final int total;
+  // final Product product;
+  const OrderPage({
+    super.key,
+    // required this.quantity,
+    // required this.total,
+    // required this.product
+  });
 
   @override
   State<OrderPage> createState() => _OrderPageState();
@@ -31,23 +33,24 @@ class _OrderPageState extends State<OrderPage> {
   TextEditingController googleAddressController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
-  createOrder(txid) async {
-    try {
-      await Database.createOrder(
-          product: widget.product,
-          phoneNumber: int.parse(phoneController.text),
-          address: addressController.text,
-          nearbyAddress: googleAddressController.text,
-          quantity: widget.quantity,
-          transId: txid,
-          total: widget.total);
-    } catch (e) {
-      print(e.toString());
-    }
-  }
+  // createOrder(txid) async {
+  //   try {
+  //     await Database.createOrder(
+  //         product: widget.product,
+  //         phoneNumber: int.parse(phoneController.text),
+  //         address: addressController.text,
+  //         nearbyAddress: googleAddressController.text,
+  //         quantity: widget.quantity,
+  //         transId: txid,
+  //         total: widget.total);
+  //   } catch (e) {
+  //     print(e.toString());
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
+    final cart = context.watch<CartProvider>();
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -62,6 +65,7 @@ class _OrderPageState extends State<OrderPage> {
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 8.0, vertical: 36.0),
+              // ignore: avoid_unnecessary_containers
               child: Container(
                 child: Column(
                   children: [
@@ -134,27 +138,13 @@ class _OrderPageState extends State<OrderPage> {
                             fontWeight: FontWeight.bold,
                           ),
                         )),
-                    ListTile(
-                      title: const Text("Product:"),
-                      trailing: Text(
-                        widget.product.name,
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    ListTile(
-                      title: const Text("Quantity:"),
-                      trailing: Text(
-                        widget.quantity.toString(),
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    ListTile(
-                      title: const Text("price:"),
-                      trailing: Text(
-                        '\$${widget.product.amount.toString()}/ qty',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
+                    ...cart.cartList
+                        .map((e) => ListTile(
+                              title: Text(e.product.name),
+                              subtitle: Text(e.product.amount.toString()),
+                              trailing: Text(e.quantity.toString()),
+                            ))
+                        .toList()
                   ],
                 ),
               ),
@@ -162,72 +152,72 @@ class _OrderPageState extends State<OrderPage> {
             const SizedBox(
               height: 55,
             ),
-            Container(
-              color: Colors.purple.withOpacity(0.05),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      "\$${widget.total.toString()}",
-                      style: const TextStyle(
-                          fontSize: 26, fontWeight: FontWeight.bold),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                              minimumSize: Size(
-                                  MediaQuery.of(context).size.width / 1.5, 50),
-                              backgroundColor: Colors.amber),
-                          onPressed: () async {
-                            if (addressController.text.isNotEmpty &&
-                                googleAddressController.text.isNotEmpty &&
-                                phoneController.text.isNotEmpty) {
-                              final res =
-                                  await paymentMethod.payWithFlutterWave(
-                                      context: context,
-                                      amount: widget.total.toString(),
-                                      email: 'abdullahiafolabi08@gmail.com');
-                              print(
-                                  ' payment status : ${res.status} : ${res.ref}');
-
-                              if (res.status) {
-                                if (context.mounted) {
-                                  createOrder(res.ref);
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              PaymentStatusPage(
-                                                response: res,
-                                                amount: widget.total,
-                                              )));
-                                }
-                              }
-                            } else {
-                              showSnack(
-                                  context: context,
-                                  message:
-                                      'fill all the additional information fields above');
-                            }
-                            // createOrder();
-                          },
-                          icon: const Icon(Icons.payment),
-                          label: const Text(
-                            "Proceed to Payment",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          )),
-                    ),
-                  ],
-                ),
-              ),
-            )
           ],
         ),
       ),
+      persistentFooterButtons: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '\$${cart.getTotalPrice().toString()}',
+              style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                      minimumSize:
+                          Size(MediaQuery.of(context).size.width / 2.0, 50),
+                      backgroundColor: Colors.amber),
+                  onPressed: () async {
+                    if (addressController.text.isNotEmpty &&
+                        googleAddressController.text.isNotEmpty &&
+                        phoneController.text.isNotEmpty) {
+                      final res = await paymentMethod.payWithFlutterWave(
+                          context: context,
+                          amount: cart.getTotalPrice().toString(),
+                          email: 'abdullahiafolabi08@gmail.com');
+                      print(' payment status : ${res.status} : ${res.ref}');
+
+                      if (res.status) {
+                        if (context.mounted) {
+                          await Database.createOrder(
+                            items: cart.cartList,
+                            phoneNumber: int.parse(phoneController.text),
+                            address: addressController.text,
+                            nearbyAddress: googleAddressController.text,
+                            transId: res.ref,
+                            total: cart.getTotalPrice(),
+                          );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PaymentStatusPage(
+                                response: res,
+                                amount: cart.getTotalPrice(),
+                              ),
+                            ),
+                          );
+                        }
+                      }
+                    } else {
+                      showSnack(
+                          context: context,
+                          message:
+                              'fill all the additional information fields above');
+                    }
+                    // createOrder();
+                  },
+                  icon: const Icon(Icons.payment),
+                  label: const Text(
+                    "Proceed to Payment",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  )),
+            ),
+          ],
+        ),
+      ],
     );
   }
 

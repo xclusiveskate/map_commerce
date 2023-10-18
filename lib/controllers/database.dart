@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:map_commerce/models/cart_model.dart';
 import 'package:map_commerce/models/order.dart';
 import 'package:map_commerce/models/product.dart';
 
@@ -52,25 +53,24 @@ class Database {
   }
 
   static createOrder(
-      {required Product product,
+      {required List<CartItem> items,
       required int phoneNumber,
       required String address,
       required String nearbyAddress,
-      required int quantity,
+      // required int quantity,
       required transId,
-      required int total}) async {
+      required double total}) async {
     try {
       final uuid = const Uuid().v1();
       OrderModel order = OrderModel(
-          // id: uid,
           id: uuid,
-          product: product,
+          items: items,
           userId: user,
           dateOfOrder: DateTime.now(),
           deliveryAddress: address,
           nearbyDeliveryAddress: nearbyAddress,
           contactInfo: phoneNumber,
-          quantity: quantity,
+          // quantity: quantity,
           paymentId: transId,
           totalAmount: total,
           dateDelivered: null,
@@ -78,10 +78,10 @@ class Database {
 
       var theOrder =
           await _db.collection('orders').doc(uuid).set(order.toFirestore());
-      await _db
-          .collection('products')
-          .doc(product.id)
-          .update({'availableQuantity': product.availableQuantity - quantity});
+      // await _db
+      //     .collection('products')
+      //     .doc(product.id)
+      //     .update({'availableQuantity': product.availableQuantity - quantity});
       return theOrder;
     } catch (e) {
       print(e.toString());

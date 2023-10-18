@@ -4,8 +4,15 @@ import 'package:flutterwave_standard/flutterwave.dart';
 
 import 'package:map_commerce/constants/constants.dart';
 import 'package:map_commerce/models/payment_status.dart';
+import 'package:flutter_paystack/flutter_paystack.dart';
 
 class PaymentMethods {
+  final plugin = PaystackPlugin();
+
+  PaymentMethods() {
+    plugin.initialize(publicKey: PAYSTACK_PUBLIC_KEY);
+  }
+
   Future<PaymentResponse> payWithFlutterWave(
       {required BuildContext context,
       required String email,
@@ -34,6 +41,8 @@ class PaymentMethods {
       return PaymentResponse(status: false, ref: '');
     }
   }
+
+  payWithPaystack() {}
 }
 
 PaymentMethods paymentMethod = PaymentMethods();

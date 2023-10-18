@@ -3,8 +3,10 @@ import 'package:map_commerce/models/cart_model.dart';
 
 import 'package:map_commerce/models/product.dart';
 import 'package:map_commerce/provider/cart._provider.dart';
+import 'package:map_commerce/screens/buyers/other_pages/cart_screen.dart';
 
 import 'package:map_commerce/screens/buyers/other_pages/order_page.dart';
+import 'package:map_commerce/utils/snackbar.dart';
 import 'package:provider/provider.dart';
 
 // import 'package:map_commerce/models/product.dart';
@@ -46,16 +48,16 @@ class _ProductDisplayState extends State<ProductDisplay> {
     }
   }
 
-  continueButton() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => OrderPage(
-                  quantity: quantity,
-                  total: total,
-                  product: widget.product,
-                )));
-  }
+  // continueButton() {
+  //   Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //           builder: (context) => OrderPage(
+  //                 quantity: quantity,
+  //                 total: total,
+  //                 product: widget.product,
+  //               )));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -69,16 +71,57 @@ class _ProductDisplayState extends State<ProductDisplay> {
     //     cart.cartList.any((element) => element.product == widget.product);
     // print(isAdded);
 
+    bool itContains =
+        cart.cartList.any((element) => element.product.id == widget.product.id);
+
     return Scaffold(
         appBar: AppBar(
           actions: [
-            IconButton(
-                onPressed: () {
-                  cart.addProductToCart(
-                      context, CartItem(product: widget.product));
-                  print(cart.cartList);
-                },
-                icon: const Icon(Icons.add))
+            Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.amber,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: IconButton(
+                            onPressed: () {
+                              // await Authentication.signOut();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const CartPage()));
+                            },
+                            icon: const Icon(
+                              Icons.production_quantity_limits,
+                              color: Colors.white70,
+                            )),
+                      )),
+                ),
+                Positioned(
+                  left: 30,
+                  top: 0,
+                  child: Container(
+                    // width: 25,
+                    // height: 25,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        // borderRadius: BorderRadius.circular(100),
+                        color: Colors.green[100]),
+                    child: Center(
+                      child: Text(
+                        cart.cartList.length.toString(),
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ],
         ),
         body: Padding(
@@ -86,25 +129,18 @@ class _ProductDisplayState extends State<ProductDisplay> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(Icons.arrow_back)),
-                  IconButton(
-                      onPressed: () {
-                        setState(() {
-                          // isLiked = !isLiked;
-                        });
-                      },
-                      icon: const Icon(
-                        Icons.favorite_border,
-                        color: Colors.grey,
-                      ))
-                ],
+              Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        // isLiked = !isLiked;
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.favorite_border,
+                      color: Colors.grey,
+                    )),
               ),
               Text(
                 widget.product.name,
@@ -214,6 +250,11 @@ class _ProductDisplayState extends State<ProductDisplay> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        "Available Quantity: ${widget.product.availableQuantity} pieces",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w300),
+                      ),
                       const Text(
                         textAlign: TextAlign.start,
                         "Description",
@@ -257,9 +298,35 @@ class _ProductDisplayState extends State<ProductDisplay> {
                                 MaterialStateProperty.all(Colors.amber),
                             minimumSize: MaterialStateProperty.all(Size(
                                 MediaQuery.of(context).size.width / 1.8, 40))),
-                        onPressed: continueButton,
+                        onPressed: () async {
+                          cart.addProductToCart(
+                              context, CartItem(product: widget.product));
+                          if (itContains) {
+                            showSnack(
+                                context: context, message: 'product added');
+                            print(itContains);
+                          } else {
+                            print(itContains);
+                            await showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                barrierColor: Colors.amber.withOpacity(0.1),
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text("Product added to cart"),
+                                    actions: [
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text("Ok!!!"))
+                                    ],
+                                  );
+                                });
+                          }
+                        },
                         child: const Text(
-                          "Continue to Check Out",
+                          "Add to Cart",
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 18,

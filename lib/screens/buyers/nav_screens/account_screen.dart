@@ -26,8 +26,8 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   void initState() {
     super.initState();
-    userId = theId;
     getUser();
+    userId = theId;
   }
 
   final theId = FirebaseAuth.instance.currentUser!.uid;

@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:map_commerce/models/cart_model.dart';
 import 'package:collection/collection.dart';
-import 'package:map_commerce/utils/snackbar.dart';
 
 class CartProvider extends ChangeNotifier {
   List<CartItem> _cartList = [];
@@ -12,25 +11,42 @@ class CartProvider extends ChangeNotifier {
   List<CartItem> get cartList => _cartList;
 
   addProductToCart(BuildContext context, CartItem item) {
-    // var inCart = _cartList.contains(item);
     var test = _cartList
         .firstWhereOrNull((element) => element.product.id == item.product.id);
-    test is CartItem ? increaseProductQTy(context, item) : addProdroduct(item);
+    test is CartItem
+        ? increaseProductQTy(context, item)
+        : addProduct(context, item);
     return test;
   }
 
-  addProdroduct(CartItem item) {
+  addProduct(BuildContext context, CartItem item) async {
     _cartList.add(item);
     notifyListeners();
+    // final cont = context.watch<AuthProvider>();
+    // print(cont.userId);
+
+    // await FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(cont.userId)
+    //     .update({
+    //   'cart': FieldValue.arrayUnion([item.toMap()])
+    // });
+    // notifyListeners();
   }
 
   //not listening from cart
   increaseProductQTy(BuildContext context, CartItem item) {
-    _cartList = _cartList
-        .map((CartItem e) => e.product.id == item.product.id ? e.quantity++ : e)
-        .toList() as List<CartItem>;
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text("product added")));
+    // _cartList = _cartList
+    //     .map((CartItem e) => e.product.id == item.product.id ? e.quantity++ : e)
+    //     .toList() as List<CartItem>;
+
+    int index = _cartList.indexWhere((e) => e.product.id == item.product.id);
+    if (index != -1) {
+      _cartList[index].quantity++;
+    } else {
+      _cartList[index];
+    }
+
     notifyListeners();
   }
 

@@ -18,7 +18,7 @@ class _BuyerOrderDetailsState extends State<BuyerOrderDetails> {
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> details = [
       {'title': "Product Name", 'subtitle': widget.product.name},
-      {'title': "Quantity", 'subtitle': widget.order.quantity},
+      // {'title': "Quantity", 'subtitle': widget.order.quantity},
       {'title': "Total Amount", 'subtitle': widget.order.totalAmount},
       {'title': "Order/Tracking Id", 'subtitle': widget.order.id},
       {'title': "Delivery Address", 'subtitle': widget.order.deliveryAddress},

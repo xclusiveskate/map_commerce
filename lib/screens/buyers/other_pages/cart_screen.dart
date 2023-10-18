@@ -160,7 +160,10 @@ class _CartPageState extends State<CartPage> {
             // ),
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(minimumSize: const Size(230, 60)),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => OrderPage()));
+              },
               label: const Text("Check Out"),
               icon: const Icon(Icons.check_circle),
             )

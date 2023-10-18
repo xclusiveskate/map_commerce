@@ -3,10 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:map_commerce/models/cart_model.dart';
 import 'package:map_commerce/provider/cart._provider.dart';
-import 'package:map_commerce/screens/sellers/other_pages/add_product.dart';
-import 'package:map_commerce/utils/snackbar.dart';
+import 'package:map_commerce/provider/sign_in_provider.dart';
 import 'package:provider/provider.dart';
-
 import 'package:map_commerce/models/product.dart';
 import 'package:map_commerce/provider/admin.change.dart';
 import 'package:map_commerce/provider/products.dart';
@@ -38,6 +36,7 @@ class _AllState extends State<All> {
     final status = context.watch<AdminChanger>();
     final product = context.watch<ProductProvider>();
     final cart = context.watch<CartProvider>();
+    Provider.of<AuthProvider>(context, listen: false);
 
     return StreamBuilder<QuerySnapshot<Object?>>(
         stream: productStream,
@@ -51,11 +50,7 @@ class _AllState extends State<All> {
             final List<Product> gottenProducts = (snapshot.data!.docs)
                 .map((doc) => Product.fromFirestore(doc))
                 .toList();
-            // print(gottenProducts);
-            // List<Product> products = gottenProducts
-            //     .map((doc) => Product.fromFirestore(doc))
-            //     .toList();
-            // theProducts = products;
+
             if (mounted) {
               product.updateListOfProduct(gottenProducts);
             }

@@ -14,7 +14,9 @@ class Authentication {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  static signUserUpWithGoogle(BuildContext context) async {
+  static Future<UserCredential> signUserUpWithGoogle(
+      BuildContext context) async {
+    UserCredential? res;
     try {
       if (kIsWeb) {
         final GoogleAuthProvider googleAuthProvider = GoogleAuthProvider();
@@ -22,6 +24,7 @@ class Authentication {
             .addScope("https://www.googleapis.com/auth/contacts.readonly");
         UserCredential res = await _auth.signInWithPopup(googleAuthProvider);
         Database.saveUserData(res);
+        return res;
       } else {
         GoogleSignInAccount? gSignIn = await GoogleSignIn(
                 // scopes: [
@@ -36,10 +39,10 @@ class Authentication {
             idToken: gAuth.idToken, accessToken: gAuth.accessToken);
         print(cred);
 
-        UserCredential res = await _auth.signInWithCredential(cred);
+        res = await _auth.signInWithCredential(cred);
         Database.saveUserData(res);
-        return res;
       }
+      return res;
     } on PlatformException catch (e) {
       if (e.code == GoogleSignIn.kNetworkError) {
         String errorMessage =
@@ -53,6 +56,7 @@ class Authentication {
         print(e.message);
       }
     }
+    return res!;
   }
 
   static signOut() {

@@ -13,7 +13,25 @@ class BuyerHomeScreen extends StatefulWidget {
   State<BuyerHomeScreen> createState() => _BuyerHomeScreenState();
 }
 
-class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
+class _BuyerHomeScreenState extends State<BuyerHomeScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController control;
+
+  @override
+  void initState() {
+    super.initState();
+    control = TabController(
+        length: 6,
+        vsync: this,
+        animationDuration: const Duration(milliseconds: 1));
+  }
+
+  @override
+  void dispose() {
+    control.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final cart = context.watch<CartProvider>();
@@ -45,21 +63,24 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
                             color: Colors.white70,
                           ))),
                   Positioned(
-                      left: 30,
-                      top: 0,
-                      child: Container(
-                          // width: 25,
-                          // height: 25,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              // borderRadius: BorderRadius.circular(100),
-                              color: Colors.green[100]),
-                          child: Center(
-                              child: Text(
-                            cart.cartList.length.toString(),
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ))))
+                    left: 30,
+                    top: 0,
+                    child: Container(
+                      // width: 25,
+                      // height: 25,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          // borderRadius: BorderRadius.circular(100),
+                          color: Colors.green[100]),
+                      child: Center(
+                        child: Text(
+                          cart.cartList.length.toString(),
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -74,7 +95,39 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
             const SizedBox(
               height: 20,
             ),
-            const All()
+            SizedBox(
+              child: TabBar(
+                  indicatorColor: Colors.amber,
+                  labelPadding: const EdgeInsets.all(16),
+                  labelColor: Colors.black,
+                  unselectedLabelColor: Colors.grey,
+                  controller: control,
+                  isScrollable: true,
+                  tabs: const [
+                    Text(
+                      "All",
+                    ),
+                    Text("Bags"),
+                    Text("Shoes"),
+                    Text("Laptops"),
+                    Text("Phones"),
+                    Text("Accessories"),
+                  ]),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: TabBarView(controller: control, children: const [
+                All(),
+                Text("Bags"),
+                Text("Shoes"),
+                Text("Laptops"),
+                Text("Phones"),
+                Text("Accessories"),
+              ]),
+            )
           ],
         ),
       ),
