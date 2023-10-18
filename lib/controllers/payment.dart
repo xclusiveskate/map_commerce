@@ -42,7 +42,29 @@ class PaymentMethods {
     }
   }
 
-  payWithPaystack() {}
+  Future<PaymentResponse> payWithPaystack(
+      BuildContext context, int amount, String email) async {
+    await Future.delayed(Duration(seconds: 2));
+    Charge charge = Charge()
+      ..amount = amount * 100
+      ..currency = "USD"
+      ..email = email
+      ..reference = DateTime.now().toIso8601String();
+    if (context.mounted) {
+      CheckoutResponse res = await plugin.checkout(context,
+          charge: charge, method: CheckoutMethod.card);
+
+      if (res.status && res.reference != null) {
+        final reference = res.reference!;
+
+        return PaymentResponse(status: res.status, ref: reference);
+      } else {
+        return PaymentResponse.initial();
+      }
+    } else {
+      return PaymentResponse.initial();
+    }
+  }
 }
 
 PaymentMethods paymentMethod = PaymentMethods();
