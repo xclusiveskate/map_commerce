@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
@@ -8,6 +9,7 @@ import 'package:map_commerce/constants/constants.dart';
 import 'package:google_maps_webservice/places.dart' as serv;
 import 'package:map_commerce/controllers/database.dart';
 import 'package:map_commerce/controllers/payment.dart';
+import 'package:map_commerce/models/user_model.dart';
 import 'package:map_commerce/provider/cart._provider.dart';
 import 'package:map_commerce/screens/buyers/other_pages/status_page.dart';
 import 'package:map_commerce/utils/snackbar.dart';
@@ -174,10 +176,18 @@ class _OrderPageState extends State<OrderPage> {
                     if (addressController.text.isNotEmpty &&
                         googleAddressController.text.isNotEmpty &&
                         phoneController.text.isNotEmpty) {
-                      final res = await paymentMethod.payWithFlutterWave(
+                      String id = Database.user;
+                      final data = await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(id)
+                          .get()
+                          .then((value) => UserModel.fromFirestore(value));
+
+                      final res = await paymentMethod.payWithPaystack(
                           context: context,
-                          amount: cart.getTotalPrice().toString(),
-                          email: 'abdullahiafolabi08@gmail.com');
+                          amount: cart.getTotalPrice(),
+                          email: data.email!);
+
                       print(' payment status : ${res.status} : ${res.ref}');
 
                       if (res.status) {
@@ -190,6 +200,7 @@ class _OrderPageState extends State<OrderPage> {
                             transId: res.ref,
                             total: cart.getTotalPrice(),
                           );
+                          cart.cartList.clear();
                           Navigator.push(
                             context,
                             MaterialPageRoute(

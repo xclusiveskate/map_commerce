@@ -36,7 +36,7 @@ class UserModel {
       email: data['email'] as String,
       imageUrl: data['imageUrl'] as String,
       cart: List<CartItem>.from(
-        (data['cart'] as List<int>).map<CartItem>(
+        (data['cart'] as List<dynamic>).map<CartItem>(
           (x) => CartItem.fromMap(x as Map<String, dynamic>),
         ),
       ),

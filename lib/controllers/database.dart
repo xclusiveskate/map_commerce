@@ -10,8 +10,8 @@ import 'package:map_commerce/models/user_model.dart';
 import 'package:uuid/uuid.dart';
 
 class Database {
-  static final FirebaseFirestore _db = FirebaseFirestore.instance;
-  static final user = FirebaseAuth.instance.currentUser!.uid;
+  static FirebaseFirestore _db = FirebaseFirestore.instance;
+  static String user = FirebaseAuth.instance.currentUser!.uid;
   static uploadProduct(
       {required String name,
       required String descripiton,

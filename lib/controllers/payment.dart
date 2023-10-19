@@ -43,11 +43,13 @@ class PaymentMethods {
   }
 
   Future<PaymentResponse> payWithPaystack(
-      BuildContext context, int amount, String email) async {
+      {required BuildContext context,
+      required double amount,
+      required String email}) async {
     await Future.delayed(Duration(seconds: 2));
     Charge charge = Charge()
-      ..amount = amount * 100
-      ..currency = "USD"
+      ..amount = (amount * 100).toInt()
+      ..currency = "NGN"
       ..email = email
       ..reference = DateTime.now().toIso8601String();
     if (context.mounted) {
