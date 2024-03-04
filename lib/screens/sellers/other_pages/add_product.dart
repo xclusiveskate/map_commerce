@@ -34,7 +34,6 @@ class _AddProductState extends State<AddProduct> {
 
   uploadProduct() async {
     final theImage = await CloudMethod().saveImageToCloudinary(img: image);
-
     final product = await Database.uploadProduct(
         name: nameControl.text,
         descripiton: descriptionControl.text,

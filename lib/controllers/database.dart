@@ -47,7 +47,7 @@ class Database {
           email: res.user!.email,
           imageUrl: res.user!.photoURL);
 
-      await _db.collection('users').doc(id).set(user.toJson());
+      await _db.collection('users').doc(id).set(user.toFirestore());
       return id;
     }
   }

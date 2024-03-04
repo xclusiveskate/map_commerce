@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:map_commerce/models/product.dart';
 
 class CartItem {
@@ -8,35 +9,18 @@ class CartItem {
     this.quantity = 1,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toFirestore() {
     return <String, dynamic>{
       'product': product.toMap(),
       'quantity': quantity,
     };
   }
 
-  factory CartItem.fromMap(Map<String, dynamic> map) {
+  factory CartItem.fromFirestore(DocumentSnapshot document) {
+    final data = document.data() as Map;
     return CartItem(
-      product: Product.fromMap(map['product'] as Map<String, dynamic>),
-      quantity: map['quantity'] as int,
+      product: Product.fromMap(data['product'] as Map<String, dynamic>),
+      quantity: data['quantity'] as int,
     );
   }
-
-  // String toJson() => json.encode(toMap());
-
-  // factory CartItem.fromJson(String source) =>
-  //     CartItem.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  // @override
-  // String toString() => 'CartItem(product: $product, quantity: $quantity)';
-
-  // @override
-  // bool operator ==(covariant CartItem other) {
-  //   if (identical(this, other)) return true;
-
-  //   return other.product == product && other.quantity == quantity;
-  // }
-
-  // @override
-  // int get hashCode => product.hashCode ^ quantity.hashCode;
 }

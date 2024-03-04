@@ -37,78 +37,10 @@ class OrderModel {
     required this.isDelivered,
   });
 
-  // Map<String, dynamic> toFirestore() {
-  //   return <String, dynamic>{
-  //     'id': id,
-  //     'product': product.toMap(),
-  //     'userId': userId,
-  //     'dateOfOrder': dateOfOrder.millisecondsSinceEpoch,
-  //     'deliveryAddress': deliveryAddress,
-  //     'nearbyDeliveryAddress': nearbyDeliveryAddress,
-  //     'contactInfo': contactInfo,
-  //     'quantity': quantity,
-  //     'totalAmount': totalAmount,
-  //     'dateDelivered': dateDelivered?.millisecondsSinceEpoch,
-  //     'isDelivered': isDelivered,
-  //   };
-  // }
-
-  // factory OrderModel.fromFirestore(DocumentSnapshot documents) {
-  //   final data = documents.data() as Map;
-  //   return OrderModel(
-  //     id: data['id'] as String,
-  //     product: Product.fromMap(data['product'] as Map<String, dynamic>),
-  //     userId: data['userId'] as String,
-  //     dateOfOrder:
-  //         DateTime.fromMillisecondsSinceEpoch(data['dateOfOrder'] as int),
-  //     deliveryAddress: data['deliveryAddress'] as String,
-  //     nearbyDeliveryAddress: data['nearbyDeliveryAddress'] as String,
-  //     contactInfo: data['contactInfo'] as int,
-  //     quantity: data['quantity'] as int,
-  //     totalAmount: data['totalAmount'] as double,
-  //     paymentId: data['paymentId'] as String,
-  //     dateDelivered: data['dateDelivered'] != null
-  //         ? DateTime.fromMillisecondsSinceEpoch(data['dateDelivered'] as int)
-  //         : null,
-  //     isDelivered: data['isDelivered'] as bool,
-  //   );
-  // }
-
-  OrderModel copyWith({
-    String? id,
-    List<CartItem>? items,
-    String? userId,
-    DateTime? dateOfOrder,
-    String? deliveryAddress,
-    String? nearbyDeliveryAddress,
-    int? contactInfo,
-    // int? quantity,
-    double? totalAmount,
-    String? paymentId,
-    DateTime? dateDelivered,
-    bool? isDelivered,
-  }) {
-    return OrderModel(
-      id: id ?? this.id,
-      items: items ?? this.items,
-      userId: userId ?? this.userId,
-      dateOfOrder: dateOfOrder ?? this.dateOfOrder,
-      deliveryAddress: deliveryAddress ?? this.deliveryAddress,
-      nearbyDeliveryAddress:
-          nearbyDeliveryAddress ?? this.nearbyDeliveryAddress,
-      contactInfo: contactInfo ?? this.contactInfo,
-      // quantity: quantity ?? this.quantity,
-      totalAmount: totalAmount ?? this.totalAmount,
-      paymentId: paymentId ?? this.paymentId,
-      dateDelivered: dateDelivered ?? this.dateDelivered,
-      isDelivered: isDelivered ?? this.isDelivered,
-    );
-  }
-
   Map<String, dynamic> toFirestore() {
     return <String, dynamic>{
       'id': id,
-      'items': items.map((x) => x.toMap()).toList(),
+      'items': items.map((x) => x.toFirestore()).toList(),
       'userId': userId,
       'dateOfOrder': dateOfOrder.millisecondsSinceEpoch,
       'deliveryAddress': deliveryAddress,
@@ -128,7 +60,7 @@ class OrderModel {
       id: data['id'] as String,
       items: List<CartItem>.from(
         (data['items'] as List<int>).map<CartItem>(
-          (x) => CartItem.fromMap(x as Map<String, dynamic>),
+          (x) => CartItem.fromFirestore(x as DocumentSnapshot),
         ),
       ),
       userId: data['userId'] as String,

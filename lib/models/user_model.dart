@@ -18,13 +18,13 @@ class UserModel {
     this.cart = const [],
   });
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toFirestore() {
     return <String, dynamic>{
       'userId': userId,
       'displayName': displayName,
       'email': email,
       'imageUrl': imageUrl,
-      'cart': cart.map((x) => x.toMap()).toList(),
+      'cart': cart.map((x) => x.toFirestore()).toList(),
     };
   }
 
@@ -37,7 +37,7 @@ class UserModel {
       imageUrl: data['imageUrl'] as String,
       cart: List<CartItem>.from(
         (data['cart'] as List<dynamic>).map<CartItem>(
-          (x) => CartItem.fromMap(x as Map<String, dynamic>),
+          (x) => CartItem.fromFirestore(x as DocumentSnapshot<Object?>),
         ),
       ),
     );
