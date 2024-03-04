@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:map_commerce/models/cart_model.dart';
 
 class UserModel {
@@ -35,11 +34,11 @@ class UserModel {
       displayName: data['displayName'] as String,
       email: data['email'] as String,
       imageUrl: data['imageUrl'] as String,
-      cart: List<CartItem>.from(
-        (data['cart'] as List<dynamic>).map<CartItem>(
-          (x) => CartItem.fromFirestore(x as DocumentSnapshot<Object?>),
-        ),
-      ),
+      cart: (data['cart'] as List<dynamic>)
+          .map<CartItem>(
+            (x) => CartItem.fromFirestore(x as DocumentSnapshot<Object?>),
+          )
+          .toList(),
     );
   }
 }
