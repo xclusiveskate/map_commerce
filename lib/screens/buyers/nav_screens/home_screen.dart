@@ -75,7 +75,7 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen>
                       child: Center(
                         child: Text(
                           cart.cartList.length.toString(),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 14, fontWeight: FontWeight.bold),
                         ),
                       ),

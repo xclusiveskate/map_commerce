@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:map_commerce/constants/constants.dart';
 import 'package:google_maps_webservice/places.dart' as serv;
+import 'package:map_commerce/constants/constants.dart';
 import 'package:map_commerce/controllers/database.dart';
 import 'package:map_commerce/controllers/payment.dart';
 import 'package:map_commerce/models/user_model.dart';
@@ -192,6 +192,7 @@ class _OrderPageState extends State<OrderPage> {
 
                       if (res.status) {
                         if (context.mounted) {
+                          cart.cartList.clear();
                           await Database.createOrder(
                             items: cart.cartList,
                             phoneNumber: int.parse(phoneController.text),
@@ -200,7 +201,7 @@ class _OrderPageState extends State<OrderPage> {
                             transId: res.ref,
                             total: cart.getTotalPrice(),
                           );
-                          cart.cartList.clear();
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(

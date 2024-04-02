@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:map_commerce/models/order.dart';
-import 'package:map_commerce/models/product.dart';
+import 'package:map_commerce/models/order_model.dart';
+import 'package:map_commerce/models/product_model.dart';
 
 class BuyerOrderDetails extends StatefulWidget {
   final Product product;

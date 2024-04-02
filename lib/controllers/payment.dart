@@ -46,7 +46,7 @@ class PaymentMethods {
       {required BuildContext context,
       required double amount,
       required String email}) async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     Charge charge = Charge()
       ..amount = (amount * 100).toInt()
       ..currency = "NGN"

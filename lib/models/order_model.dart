@@ -1,13 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // import 'dart:convert';
 
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-
 import 'package:map_commerce/models/cart_model.dart';
-import 'package:map_commerce/models/product.dart';
 
 class OrderModel {
   final String id;
@@ -58,11 +53,12 @@ class OrderModel {
     final data = documents.data() as Map;
     return OrderModel(
       id: data['id'] as String,
-      items: List<CartItem>.from(
-        (data['items'] as List<int>).map<CartItem>(
-          (x) => CartItem.fromFirestore(x as DocumentSnapshot),
-        ),
-      ),
+      items: (data['items'] as List<Map<String, dynamic>>)
+          .map<CartItem>(
+            (x) => CartItem.fromFirestore(x as DocumentSnapshot),
+          )
+          .toList(),
+
       userId: data['userId'] as String,
       dateOfOrder:
           DateTime.fromMillisecondsSinceEpoch(data['dateOfOrder'] as int),

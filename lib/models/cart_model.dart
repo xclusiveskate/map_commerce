@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:map_commerce/models/product.dart';
+import 'package:map_commerce/models/product_model.dart';
 
 class CartItem {
   Product product;
@@ -11,7 +11,7 @@ class CartItem {
 
   Map<String, dynamic> toFirestore() {
     return <String, dynamic>{
-      'product': product.toMap(),
+      'product': product.toFirestore(),
       'quantity': quantity,
     };
   }
@@ -19,7 +19,8 @@ class CartItem {
   factory CartItem.fromFirestore(DocumentSnapshot document) {
     final data = document.data() as Map;
     return CartItem(
-      product: Product.fromMap(data['product'] as Map<String, dynamic>),
+      product:
+          Product.fromFirestore(data['product'] as DocumentSnapshot<Object?>),
       quantity: data['quantity'] as int,
     );
   }

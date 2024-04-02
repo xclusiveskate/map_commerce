@@ -1,16 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:map_commerce/constants/constants.dart';
-import 'package:map_commerce/models/order.dart';
+import 'package:map_commerce/models/order_model.dart';
 import 'package:map_commerce/provider/admin.change.dart';
-import 'package:map_commerce/provider/products.dart';
-import 'package:map_commerce/screens/sellers/other_pages/view_order_history.dart';
-
+import 'package:map_commerce/provider/products_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:collection/collection.dart';
 
 class OrdersScreen extends StatelessWidget {
   const OrdersScreen({super.key});
@@ -121,8 +119,8 @@ class OrdersScreen extends StatelessWidget {
                                 leading: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
-                                  children: [
-                                    const Text("Quantity"),
+                                  children: const [
+                                    Text("Quantity"),
                                     // Text(order.quantity.toString())
                                   ],
                                 ),

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:map_commerce/models/cart_model.dart';
-
-import 'package:map_commerce/models/product.dart';
+import 'package:map_commerce/models/product_model.dart';
 import 'package:map_commerce/provider/cart._provider.dart';
 import 'package:map_commerce/screens/buyers/other_pages/cart_screen.dart';
-
-import 'package:map_commerce/screens/buyers/other_pages/order_page.dart';
 import 'package:map_commerce/utils/snackbar.dart';
 import 'package:provider/provider.dart';
 
@@ -114,7 +111,7 @@ class _ProductDisplayState extends State<ProductDisplay> {
                     child: Center(
                       child: Text(
                         cart.cartList.length.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 14, fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -252,7 +249,7 @@ class _ProductDisplayState extends State<ProductDisplay> {
                     children: [
                       Text(
                         "Available Quantity: ${widget.product.availableQuantity} pieces",
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w300),
                       ),
                       const Text(
@@ -313,13 +310,13 @@ class _ProductDisplayState extends State<ProductDisplay> {
                                 barrierColor: Colors.amber.withOpacity(0.1),
                                 builder: (context) {
                                   return AlertDialog(
-                                    title: Text("Product added to cart"),
+                                    title: const Text("Product added to cart"),
                                     actions: [
                                       ElevatedButton(
                                           onPressed: () {
                                             Navigator.pop(context);
                                           },
-                                          child: Text("Ok!!!"))
+                                          child: const Text("Ok!!!"))
                                     ],
                                   );
                                 });

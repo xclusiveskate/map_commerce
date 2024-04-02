@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:map_commerce/firebase_options.dart';
 import 'package:map_commerce/provider/admin.change.dart';
 import 'package:map_commerce/provider/cart._provider.dart';
-import 'package:map_commerce/provider/products.dart';
+import 'package:map_commerce/provider/products_provider.dart';
 import 'package:map_commerce/provider/sign_in_provider.dart';
 import 'package:map_commerce/screens/auth/check_user.dart';
 import 'package:provider/provider.dart';

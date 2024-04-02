@@ -3,14 +3,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:map_commerce/models/cart_model.dart';
-import 'package:map_commerce/models/order.dart';
-import 'package:map_commerce/models/product.dart';
-
+import 'package:map_commerce/models/order_model.dart';
+import 'package:map_commerce/models/product_model.dart';
 import 'package:map_commerce/models/user_model.dart';
 import 'package:uuid/uuid.dart';
 
 class Database {
-  static FirebaseFirestore _db = FirebaseFirestore.instance;
+  static final FirebaseFirestore _db = FirebaseFirestore.instance;
   static String user = FirebaseAuth.instance.currentUser!.uid;
   static uploadProduct(
       {required String name,
@@ -64,7 +63,7 @@ class Database {
       final uuid = const Uuid().v1();
       OrderModel order = OrderModel(
           id: uuid,
-          items: items,
+          items: items.map((e) => e).toList(),
           userId: user,
           dateOfOrder: DateTime.now(),
           deliveryAddress: address,

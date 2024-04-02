@@ -20,12 +20,14 @@ class _CartPageState extends State<CartPage> {
         title: const Text("CheckOut Screen"),
         centerTitle: true,
         actions: [
-          IconButton(
-              tooltip: "Delete All",
-              onPressed: () {
-                cart.removeAllProductsFromCart();
-              },
-              icon: const Icon(Icons.delete))
+          cart.cartList.isEmpty
+              ? const SizedBox.shrink()
+              : IconButton(
+                  tooltip: "Delete All",
+                  onPressed: () {
+                    cart.removeAllProductsFromCart();
+                  },
+                  icon: const Icon(Icons.delete))
         ],
       ),
       body: Consumer(builder: (context, cartProvider, child) {
@@ -106,7 +108,7 @@ class _CartPageState extends State<CartPage> {
                                       cart.decreaseProductQuantity(prod);
                                       setState(() {});
                                     },
-                                    icon: Icon(Icons.remove)),
+                                    icon: const Icon(Icons.remove)),
                               ),
                               Container(
                                 height: 25,
@@ -133,9 +135,9 @@ class _CartPageState extends State<CartPage> {
                                     onPressed: () {
                                       // cart.increaseProdroductQTy(prod);
                                       cart.increaseProductQuantity(prod);
-                                      setState(() {});
+                                      // setState(() {});
                                     },
-                                    icon: Icon(Icons.add)),
+                                    icon: const Icon(Icons.add)),
                               )
                             ],
                           )
@@ -162,7 +164,7 @@ class _CartPageState extends State<CartPage> {
               style: ElevatedButton.styleFrom(minimumSize: const Size(230, 60)),
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => OrderPage()));
+                    MaterialPageRoute(builder: (context) => const OrderPage()));
               },
               label: const Text("Check Out"),
               icon: const Icon(Icons.check_circle),

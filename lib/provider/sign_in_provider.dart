@@ -20,13 +20,22 @@ class AuthProvider extends ChangeNotifier {
   }
 
   signInUser(BuildContext context) async {
-    _isLoading = true;
-    notifyListeners();
-    UserCredential res = await Authentication.signUserUpWithGoogle(context);
-    _userId = res.user!.uid;
-    notifyListeners();
-    await Future.delayed(const Duration(seconds: 5), () {});
-    _isLoading = false;
-    notifyListeners();
+    try {
+      _isLoading = true;
+      notifyListeners();
+      UserCredential res = await Authentication.signUserUpWithGoogle(context);
+      if (res.user != null) {
+        _userId = res.user!.uid;
+        notifyListeners();
+        await Future.delayed(const Duration(seconds: 5), () {});
+        _isLoading = false;
+        notifyListeners();
+      } else {
+        _isLoading = false;
+        notifyListeners();
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }
